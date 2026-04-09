@@ -1,0 +1,97 @@
+---
+description: Delta Labs frontend folder structure, modules, components, contexts — copy to implementation project .cursor/rules/
+alwaysApply: true
+---
+
+# Delta Labs Frontend — Folder Structure, Modules, Components, Contexts
+
+Use this when setting up or changing the Vite + React + TypeScript project structure. Source: Delta Labs documentation (architecture, coding standards, design system).
+
+## 1. Top-Level `src/` Structure
+
+Create and keep exactly these top-level areas:
+
+```
+src/
+├── theme/                    # Design tokens only (colors, spacing, typography, shadows)
+├── components/
+│   ├── theme/                # UI primitives only (Button, Card, Input, Modal, etc.)
+│   └── features/             # Feature compositions (compose theme components only)
+├── modules/                  # Feature modules (Auth, Course, RentLab, etc.)
+├── Common/                   # Shared across modules (e.g. Landing, shared layout)
+└── contexts/                 # App-wide React Context providers (Auth, Theme, etc.)
+```
+
+- **theme/** — Single source for design. Consumed by Tailwind config and theme components. No components here.
+- **components/theme/** — Single source for UI primitives. One folder per primitive; each has variant/size/state API. Barrel `theme/index.ts` re-exports all. Features and modules import only from here.
+- **components/features/** — Compositions that use only theme components (no new primitives).
+- **modules/** — One folder per domain (e.g. Auth, Course, RentLab). See §2.
+- **Common/** — Cross-module shared UI (e.g. landing, shell).
+- **contexts/** — Global providers (e.g. AuthContext, ThemeContext). PascalCase + "Context" suffix.
+
+## 2. Module Structure (`src/modules/[ModuleName]/`)
+
+Each module follows this layout:
+
+```
+src/modules/[ModuleName]/
+├── views/                    # Module-specific pages/views (use library components only)
+├── context/                  # Optional module-level context
+│   └── [Module]Context.tsx
+├── features/                 # Optional sub-features (each with views, hooks, etc.)
+├── routing/                  # Optional: guards, hooks, routes, router
+│   ├── guards/
+│   ├── hooks/
+│   ├── routes/
+│   └── [Module]Router.tsx
+├── types/
+├── utils/
+└── index.ts                  # Public API: export context, views, types, router
+```
+
+Use `index.ts` to expose only the public API (context, main views, types, router). No deep imports from outside the module.
+
+## 3. Theme Component Structure (`src/components/theme/`)
+
+One folder per primitive:
+
+```
+src/components/theme/
+├── Button/
+│   ├── Button.tsx
+│   ├── Button.types.ts       # optional
+│   └── index.ts
+├── Card/
+│   ├── Card.tsx
+│   └── index.ts
+└── index.ts                  # Barrel: re-export all theme components
+```
+
+Every theme component has a single definition with a **variant/size/state API**. Feature and module code must import from `@/components/theme` (or `theme/index`), never define duplicate primitives.
+
+## 4. Contexts
+
+- **Location:** App-wide in `src/contexts/`; module-specific in `src/modules/[Module]/context/`.
+- **Naming:** PascalCase + `Context` suffix (e.g. `AuthContext.tsx`, `ThemeContext.tsx`).
+- **Exports:** Provider component and a hook (e.g. `useAuth`, `useTheme`).
+
+## 5. Naming Conventions
+
+| Type          | Convention               | Example                                            |
+| ------------- | ------------------------ | -------------------------------------------------- |
+| Components    | PascalCase               | `Button.tsx`, `UserProfile.tsx`                    |
+| Contexts      | PascalCase + Context     | `ThemeContext.tsx`, `AuthContext.tsx`              |
+| Hooks         | camelCase + use prefix   | `useAuth.ts`, `useCourseNavigation.ts`             |
+| Utils / types | camelCase or PascalCase  | `validation.ts`, `CourseTypes.ts`                  |
+| Folders       | kebab-case or PascalCase | `enrolled-courses/`, `Auth/` (modules: PascalCase) |
+
+## 6. Path Alias
+
+Use `@/` for `src/` (e.g. `@/components/theme`, `@/modules/Auth`, `@/contexts/ThemeContext`). Ensure `vite.config` and `tsconfig` are set up for `@/`.
+
+## 7. Principles (Do Not Break)
+
+- **Single source for design:** All tokens in `src/theme/`; Tailwind and components consume them.
+- **Single source for UI primitives:** All primitives in `src/components/theme/`; features and modules only compose them.
+- **No duplicate primitives:** Do not add buttons, inputs, cards, etc. outside `components/theme/`.
+- **Atomic composition:** Feature components and module views are built from theme components only (atoms/molecules → organisms/templates).

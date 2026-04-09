@@ -1,0 +1,94 @@
+---
+description: Delta Labs AI orchestrator, tools, flow — copy to backend/AI project .cursor/rules/
+alwaysApply: true
+---
+
+# Delta Labs AI — Orchestrator, Tools & Flow
+
+Use this when implementing the AI layer (chat, execute, tools). Source: Delta Labs documentation (architecture §6, backend domain layer).
+
+## 1. Principles
+
+- **Tools = backend capabilities.** Every AI action is implemented by a **tool** that calls the **same domain services** used by REST. No business logic in the AI layer beyond intent resolution and formatting.
+- **User-scoped and secure.** Tools receive user_id/session; authorization is enforced in the domain service layer. Every tool is permission-checked and user-scoped.
+- **Observable and bounded.** Log prompt, model, token usage, tool calls, latency; rate limit and cost cap per user/tenant. Structured logs from day one for AI paths.
+
+## 2. Components
+
+| Component | Responsibility |
+|-----------|-----------------|
+| **AI Gateway / Orchestrator** | Receives prompt; loads conversation from MongoDB if needed; calls LLM with system prompt + tool definitions; parses tool calls; executes tools via domain services; returns/streams answer; persists turn to MongoDB. |
+| **Tool registry** | Catalog of tools: name, description, parameters (JSON Schema). Each tool maps to one domain service call. |
+| **LLM provider** | OpenAI, Anthropic, Azure OpenAI, or OSS; abstracted behind an interface. |
+| **Conversation store** | MongoDB: conversation document with messages and optional tool_calls; indexed by user_id, conversation_id. |
+
+## 3. Request Flow (Detail)
+
+1. **Request:** `POST /v1/ai/execute` or `/v1/ai/chat` with `{ "prompt", "conversation_id?", "stream?" }`. Auth: JWT → user_id.
+2. **Load context:** If conversation_id, load messages from MongoDB; else start new conversation.
+3. **System prompt:** Product description, available tools (name + description + params), and rules.
+4. **LLM call:** Send system + conversation history + user prompt; request tool_use in response.
+5. **Tool execution:** For each tool_call: resolve name and arguments; validate; **call domain service (with user_id)**; collect result.
+6. **Follow-up (optional):** Send tool results back to LLM; LLM returns final natural-language answer.
+7. **Persist:** Append user message and assistant message (and tool_calls) to conversation in MongoDB.
+8. **Response:** Return `{ "answer", "conversation_id", "turn_id?" }` or stream SSE.
+
+**Correct:** Orchestrator receives user_id from JWT; passes user_id into every tool handler; tool handler calls `catalog_service.list_courses()` or `learning_service.enroll(user_id, course_id)`; domain service enforces authz.  
+**Incorrect:** Implementing “enroll user” logic inside the AI module (e.g. writing to DB from the orchestrator). Enrollment must go through `domain.learning.services.enroll_user(user_id, course_id)`.
+
+## 4. Tool Catalog (Reference)
+
+Every tool is permission-checked and user-scoped via the domain service.
+
+| Tool name | Description (for LLM) | Parameters | Backend call |
+|-----------|------------------------|------------|--------------|
+| list_courses | Returns available courses with instructor, category, level | — | catalog_service.list_courses() |
+| get_my_enrollments | Returns current user's enrolled courses and progress | — | learning_service.get_enrollments(user_id) |
+| enroll_in_course | Enrolls the user in a course | course_id | learning_service.enroll(user_id, course_id) |
+| get_course_grades | Returns grades for a course | course_id? | assessment_service.get_grades(user_id, course_id) |
+| search_courses | Search courses by query and filters | query, category?, level? | catalog_service.search(...) |
+| add_to_cart | Adds a course or resource to cart | item_id, type | commerce_service.add_to_cart(user_id, ...) |
+| book_lab | Books a lab slot | lab_id, slot_start | labs_service.book(user_id, lab_id, slot_start) |
+| ask_question | Posts a question in course Q&A | course_id, title, body | engagement_service.ask_question(user_id, ...) |
+| navigate_to_route | Returns the app route for a feature | route_name, params? | Static mapping; no backend call |
+
+New tools: add to registry with name, description, JSON Schema params, and handler that **only** calls a domain service (with user_id). Document in tool catalog; no new business logic in the AI layer.
+
+## 5. Folder & Module Structure
+
+Recommended layout (inside the same backend repo):
+
+```
+app/
+├── api/
+│   └── ai/
+│       └── routes.py          # POST /v1/ai/chat, /v1/ai/execute; auth → user_id → orchestrator
+├── domain/
+│   └── ai_orchestration/
+│       ├── orchestrator.py    # Request handling, LLM call, tool dispatch, persist
+│       ├── tool_registry.py   # Tool definitions (name, description, params, handler)
+│       ├── tools/             # Optional: one module per tool group (catalog, learning, commerce, …)
+│       │   ├── catalog_tools.py
+│       │   └── learning_tools.py
+│       ├── prompts.py         # System prompt and rules
+│       └── conversation_repo.py  # Load/save conversation in MongoDB
+└── ...
+```
+
+- **Routes:** Thin; validate body, get user_id from `get_current_user`, call orchestrator, return response or stream.
+- **Orchestrator:** Load conversation, build system prompt (with tool definitions), call LLM, parse tool_calls, execute tools via registry, persist turn, return answer.
+- **Tool registry:** Register each tool: name, description, parameters (JSON Schema), handler function. Handler receives (user_id, args) and returns result; handler calls domain service only.
+- **Conversation store:** MongoDB `conversations` collection; index by user_id, conversation_id.
+
+## 6. Naming & Observability
+
+- **Naming:** Tool names snake_case (`list_courses`, `get_my_enrollments`). Orchestrator modules: `orchestrator.py`, `tool_registry.py`, `conversation_repo.py`.
+- **Logging:** Log request_id, user_id, conversation_id, model, token usage, tool calls, latency. No PII in logs; structured JSON.
+- **Errors:** Tool execution errors: map to user-facing message; log full error server-side. Rate limit: 429 with `Retry-After`; cost cap: reject or throttle and return clear message.
+
+## 7. Principles (Do Not Break)
+
+- **No business logic in AI layer:** Tools only call existing domain services. No new use cases implemented inside the orchestrator.
+- **Single domain layer:** REST and AI use the same services; tools are thin adapters.
+- **Auth in domain:** Tool handlers pass user_id; the service enforces RBAC and resource access.
+- **Tool catalog and auth:** Every AI-driven action is a registered tool; every tool is permission-checked and user-scoped.

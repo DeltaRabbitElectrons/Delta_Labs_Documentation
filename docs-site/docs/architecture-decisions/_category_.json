@@ -1,0 +1,5 @@
+{
+  "label": "Architecture Decisions",
+  "position": 12,
+  "link": { "type": "doc", "id": "architecture-decisions/adr-0001-tech-stack" }
+}

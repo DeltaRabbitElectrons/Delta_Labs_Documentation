@@ -1,0 +1,17 @@
+{
+  "sidebar_folder-structure": [
+    {
+      "type": "category",
+      "label": "group",
+      "collapsible": true,
+      "collapsed": false,
+      "items": [
+        {
+          "type": "doc",
+          "id": "page",
+          "label": "page"
+        }
+      ]
+    }
+  ]
+}

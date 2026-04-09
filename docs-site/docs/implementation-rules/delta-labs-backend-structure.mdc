@@ -1,0 +1,121 @@
+---
+description: Delta Labs backend folder structure, domains, API — copy to backend project .cursor/rules/
+alwaysApply: true
+---
+
+# Delta Labs Backend — Structure, Domains & API
+
+Use this when setting up or changing the Python/FastAPI backend. Source: Delta Labs documentation (architecture §4–5, API reference).
+
+## 1. Stack & Responsibilities
+
+| Component | Choice | Role |
+|-----------|--------|------|
+| **Runtime** | Python 3.11+ | Type hints, async support, performance. |
+| **Framework** | FastAPI | Async, OpenAPI, dependency injection, validation (Pydantic). |
+| **DB access** | Motor (async) or pymongo | MongoDB: single primary database; connection pool; repositories per domain. |
+| **Redis** | redis / aioredis | Cache, sessions, rate-limit counters, idempotency keys, job queues. |
+| **Validation** | Pydantic | Request/response models; shared with OpenAPI. |
+| **Auth** | JWT (e.g. PyJWT) + OAuth libs | Token issue/verify; integration with gateway; `get_current_user` dependency. |
+
+**Single database:** MongoDB for all core domains. Redis for cache, sessions, rate limits, idempotency keys, queues only. No dual-write without a defined sync strategy.
+
+## 2. Top-Level Layout (Modular Monolith)
+
+```
+app/
+├── api/                    # Route modules only (thin; delegate to domain)
+│   ├── auth/
+│   ├── courses/
+│   ├── enrollments/
+│   ├── labs/
+│   ├── ai/
+│   └── ...
+├── core/                   # Config, security, shared dependencies
+│   ├── config.py
+│   ├── security.py         # JWT, get_current_user
+│   └── deps.py             # get_db, get_current_user, etc.
+├── domain/                 # One folder per domain (services + repositories + models)
+│   ├── identity/
+│   ├── catalog/
+│   ├── learning/
+│   ├── assessment/
+│   ├── engagement/
+│   ├── commerce/
+│   ├── labs/
+│   ├── ai_orchestration/
+│   └── ...
+├── infra/                  # DB connection, Redis, external HTTP clients
+│   ├── mongodb.py
+│   ├── redis.py
+│   └── http_clients.py
+└── jobs/                   # Background tasks (Redis-backed queue)
+```
+
+- **api/** — HTTP entry points; validate request, call domain service, return response. No business logic here.
+- **core/** — App-wide config, auth dependencies, shared utilities.
+- **domain/<domain>/** — Services (use cases), repositories (data access), models/schemas. Single place for business logic.
+- **infra/** — Connections and external clients; used by domain/code.
+- **jobs/** — Async jobs (e.g. Celery, ARQ) using Redis.
+
+## 3. Domain Folder Structure
+
+Each domain under `app/domain/<domain>/`:
+
+```
+app/domain/<domain>/
+├── services.py     # Use cases (e.g. enroll_user, get_grades)
+├── repositories.py # MongoDB access (collections, queries)
+├── models.py       # Pydantic schemas / domain models
+└── __init__.py
+```
+
+- **Services** call repositories and other domain services. Enforce authz here (e.g. user_id scoping). This is the **single place for business logic**.
+- **Repositories** do all MongoDB access (collections, queries, indexes); no business logic.
+- **Models** define request/response and domain entities; shared with API layer.
+
+**Correct:** API route → validate input (Pydantic) → call `domain.learning.services.enroll_user(user_id, course_id)` → return response.  
+**Incorrect:** Putting enrollment logic (e.g. “check seat limit”, “create enrollment record”) inside `app/api/` — that belongs in `domain/learning/services.py`.
+
+## 4. Naming Conventions
+
+| Type | Convention | Example |
+|------|-------------|---------|
+| **Modules / packages** | snake_case | `identity/`, `course_sections.py` |
+| **Services / functions** | snake_case | `enroll_user`, `get_course_grades` |
+| **Classes (models, schemas)** | PascalCase | `Enrollment`, `CourseResponse`, `UserCreate` |
+| **Constants** | UPPER_SNAKE_CASE | `MAX_PAGE_SIZE`, `DEFAULT_LIMIT` |
+| **Route modules** | Match resource | `auth.py`, `courses.py`, `enrollments.py` |
+
+## 5. API Design (REST)
+
+- **URLs:** Resource-oriented; standard methods (GET, POST, PUT, PATCH, DELETE). Version prefix e.g. `/v1/`.
+- **Idempotency:** Mutations accept `Idempotency-Key` header; store in Redis/DB; return same result on replay.
+- **Pagination:** Cursor-based for lists: `?cursor=&limit=20`.
+- **Errors:** HTTP status + body `{ "code", "message", "requestId", "details?" }`.
+- **Auth:** JWT on every sensitive route; `get_current_user` in dependencies. Return 401/403 with body `{ "code", "message", "requestId" }`.
+
+## 6. API Surface (Reference)
+
+- **Auth:** `POST /auth/login`, `POST /auth/register`, `POST /auth/refresh`, `GET/PATCH /users/me`, …
+- **Courses:** `GET /courses`, `GET /courses/:id`, `POST /enrollments`, `GET /enrollments`, `GET/PATCH /enrollments/:id/progress`, …
+- **Enrolled detail:** `GET/POST /courses/:id/questions`, `GET/POST /courses/:id/answers`, `GET /courses/:id/grades`, `GET /courses/:id/resources`, …
+- **Commerce:** `GET/POST/DELETE /cart`, `POST /orders`, `GET /orders`, `GET/POST /sponsors`, …
+- **Labs:** `GET /labs`, `GET /labs/:id`, `GET /labs/:id/availability`, `POST /labs/:id/bookings`, …
+- **AI:** `POST /v1/ai/chat` or `POST /v1/ai/execute` (prompt → tools + response).
+
+Versioning: URL prefix (e.g. `/v1/...`) or header `Accept: application/vnd.deltalabs.v1+json`.
+
+## 7. Database (MongoDB + Redis)
+
+- **MongoDB:** Single primary DB. All core entities: users, courses, enrollments, grades, orders, labs, conversations, etc. Use transactions for: enrollment+payment, cart→order, lab booking, sponsorship approval.
+- **Redis:** Sessions, cache, rate-limit counters, idempotency keys, job queues. Key patterns: `session:{id}`, `cache:{resource}:v1:{id}`, `ratelimit:{scope}:{id}`, `idempotency:{key}`.
+- **IDs:** UUIDs for external ids; idempotency keys for critical mutations.
+- **Schema migrations:** Versioned, reversible where possible; no untracked DDL. Keep migration history in repo.
+
+## 8. Principles (Do Not Break)
+
+- **Single domain layer:** REST and AI both call the same domain services; no duplicated business logic.
+- **Authorization in domain:** Every service method receives user_id (or tenant); enforce RBAC and resource-level checks in the service layer.
+- **No business logic in api/:** Routes only validate input, call domain, format response.
+- **Transactions:** Use multi-document transactions for enrollment+payment, checkout, lab booking, sponsorship approval.

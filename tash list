@@ -1,0 +1,12 @@
+[33m20e2a29[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{0}: pull --rebase origin main (finish): returning to refs/heads/main
+[33m20e2a29[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{1}: pull --rebase origin main (pick): chore: force vercel to not cache html files
+[33mde9685b[m HEAD@{2}: pull --rebase origin main (start): checkout de9685bfcf5e46727dabd3b8009f6306900b8793
+[33mf9ee006[m HEAD@{3}: reset: moving to HEAD
+[33mf9ee006[m HEAD@{4}: reset: moving to HEAD
+[33mf9ee006[m HEAD@{5}: commit: chore: force vercel to not cache html files
+[33m93cd1e2[m HEAD@{6}: commit: fix: update View Live link to actual Vercel URL
+[33m64d125e[m HEAD@{7}: rebase (finish): returning to refs/heads/main
+[33m64d125e[m HEAD@{8}: rebase (continue): fix: sync rich editor frontend/backend keys and push architectural fixes for docusaurus build
+[33m6d3ba14[m HEAD@{9}: pull --rebase origin main (pick): fix: trigger Docusaurus build gracefully using python script syncing sidebars.ts correctly
+[33m5c0518a[m HEAD@{10}: pull --rebase origin main (pick): fix: strip number prefixes from slugs in sidebars.ts to match Docusaurus document IDs
+[33m182dc41[m HEAD@{11}: pull --rebase origin main (pick): feat: automatically recover and inject legacy pages from database into native sidebar group trees

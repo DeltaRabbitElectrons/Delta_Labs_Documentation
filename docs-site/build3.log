@@ -1,0 +1,135 @@
+[WARNING] The `siteConfig.onBrokenMarkdownLinks` config option is deprecated and will be removed in Docusaurus v4.
+Please migrate and move this option to `siteConfig.markdown.hooks.onBrokenMarkdownLinks` instead.
+[INFO] [en] Creating an optimized production build...
+[WARNING] The `siteConfig.onBrokenMarkdownLinks` config option is deprecated and will be removed in Docusaurus v4.
+Please migrate and move this option to `siteConfig.markdown.hooks.onBrokenMarkdownLinks` instead.
+[ERROR] Loading of version failed for version current
+
+[ERROR] Error: Unable to build website for locale en.
+    at tryToBuildLocale (E:\delta-labs-docs\delta-labs-docs\docs-site\node_modules\@docusaurus\core\lib\commands\build\build.js:83:15)
+    at async E:\delta-labs-docs\delta-labs-docs\docs-site\node_modules\@docusaurus\core\lib\commands\build\build.js:35:9
+    at async mapAsyncSequential (E:\delta-labs-docs\delta-labs-docs\docs-site\node_modules\@docusaurus\utils\lib\jsUtils.js:21:24)
+    at async Command.build (E:\delta-labs-docs\delta-labs-docs\docs-site\node_modules\@docusaurus\core\lib\commands\build\build.js:34:5)
+    at async Promise.all (index 0)
+    at async runCLI (E:\delta-labs-docs\delta-labs-docs\docs-site\node_modules\@docusaurus\core\lib\commands\cli.js:56:5)
+    at async file:///E:/delta-labs-docs/delta-labs-docs/docs-site/node_modules/@docusaurus/core/bin/docusaurus.mjs:44:3 {
+  [cause]: Error: Invalid sidebar file at "sidebars.ts".
+  These sidebar document ids do not exist:
+  - hello
+  - tutorial-basics/create-a-document
+  
+  Available document ids are:
+  - README
+  - api-reference/api-reference
+  - api-reference/index
+  - architecture-decisions/adr-0001-tech-stack
+  - architecture-decisions/adr-0002-auth-approach
+  - architecture-decisions/adr-0003-ai-model-selection
+  - architecture/ai-architecture
+  - architecture/architecture-intro
+  - architecture/data-flow
+  - architecture/data-model
+  - architecture/deployment-architecture
+  - architecture/full-system-architecture
+  - architecture/integration-points
+  - architecture/service-boundaries
+  - architecture/use-cases
+  - best-practices/best-practices
+  - best-practices/best-practices-intro
+  - coding-standards/coding-standards
+  - coding-standards/standards-intro
+  - design-system/api-standards
+  - design-system/components/component-catalog
+  - design-system/components/component-doc-template
+  - design-system/design-intro
+  - design-system/design-principles
+  - design-system/design-system
+  - design-system/design-tokens
+  - development-standards/coding-standards
+  - development-standards/documentation-rules
+  - development-standards/error-handling
+  - development-standards/logging-standards
+  - development-standards/naming-conventions
+  - development-standards/standards-intro
+  - documentation-analysis
+  - explanation/design-philosophy
+  - explanation/product-vision
+  - explanation/project-analysis
+  - explanation/scalability-strategy
+  - explanation/system-overview
+  - explanation/tradeoffs-and-constraints
+  - getting-started/contributor-workflow
+  - getting-started/first-run
+  - getting-started/introduction
+  - getting-started/local-setup
+  - getting-started/repo-overview
+  - getting-started/system-requirements
+  - hi-overview
+  - how-to-guides/add-ai-model
+  - how-to-guides/add-new-api
+  - how-to-guides/add-new-component
+  - how-to-guides/debug-production-issue
+  - how-to-guides/extend-backend-service
+  - how-to-guides/handle-migration
+  - implementation-rules/README
+  - implementation-rules/ai-structure
+  - implementation-rules/backend-structure
+  - implementation-rules/frontend-structure
+  - intro
+  - migration-from-old-docs
+  - operations/alerting
+  - operations/backup-recovery
+  - operations/ci-cd
+  - operations/environments
+  - operations/incident-response
+  - operations/monitoring-logging
+  - overview/overview
+  - overview/project-analysis
+  - process/cicd-branch-pr
+  - process/process-intro
+  - reference/api-reference/README
+  - reference/component-reference/README
+  - reference/config-reference
+  - reference/environment-variables
+  - reference/error-codes
+  - release-management/deprecation-policy
+  - release-management/release-process
+  - release-management/rollback-strategy
+  - release-management/versioning
+  - security/authentication
+  - security/authorization
+  - security/data-privacy
+  - security/secrets-management
+  - security/security-overview
+  - security/threat-model
+  - separation-guide
+  - structure-guide
+  - structures/README
+  - structures/delta-labs-ai-structure
+  - structures/delta-labs-backend-structure
+  - structures/delta-labs-frontend-structure
+  - templates/adr-template
+  - templates/api-doc-template
+  - templates/component-doc-template
+  - templates/how-to-template
+  - templates/index
+  - templates/templates
+  - testing-quality/e2e-testing
+  - testing-quality/integration-testing
+  - testing-quality/quality-gates
+  - testing-quality/testing-strategy
+  - testing-quality/unit-testing
+  
+      at Object.checkSidebarsDocIds (E:\delta-labs-docs\delta-labs-docs\docs-site\node_modules\@docusaurus\plugin-content-docs\lib\sidebars\utils.js:245:19)
+      at doLoadVersion (E:\delta-labs-docs\delta-labs-docs\docs-site\node_modules\@docusaurus\plugin-content-docs\lib\versions\loadVersion.js:102:19)
+      at async loadVersion (E:\delta-labs-docs\delta-labs-docs\docs-site\node_modules\@docusaurus\plugin-content-docs\lib\versions\loadVersion.js:119:16)
+      at async Promise.all (index 0)
+      at async Object.loadContent (E:\delta-labs-docs\delta-labs-docs\docs-site\node_modules\@docusaurus\plugin-content-docs\lib\index.js:152:33)
+      at async E:\delta-labs-docs\delta-labs-docs\docs-site\node_modules\@docusaurus\core\lib\server\plugins\plugins.js:40:23
+      at async Promise.all (index 0)
+      at async E:\delta-labs-docs\delta-labs-docs\docs-site\node_modules\@docusaurus\core\lib\server\plugins\plugins.js:146:25
+      at async loadSite (E:\delta-labs-docs\delta-labs-docs\docs-site\node_modules\@docusaurus\core\lib\server\site.js:155:45)
+      at async buildLocale (E:\delta-labs-docs\delta-labs-docs\docs-site\node_modules\@docusaurus\core\lib\commands\build\buildLocale.js:33:18)
+}
+[INFO] Docusaurus version: 3.9.2
+Node version: v24.11.1

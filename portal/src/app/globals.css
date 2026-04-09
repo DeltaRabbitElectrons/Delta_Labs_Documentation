@@ -1,0 +1,259 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@import "../styles/design-system.css";
+
+:root {
+  --background: var(--bg-primary);
+  --foreground: var(--text-primary);
+}
+
+@theme inline {
+  --color-background: var(--bg-primary);
+  --color-foreground: var(--text-primary);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-mono);
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-inter);
+}
+
+/* ── Animations ─────────────────────────────────────────────── */
+@keyframes pulse-subtle {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.95; }
+}
+.animate-pulse-subtle {
+  animation: pulse-subtle 2s infinite ease-in-out;
+}
+
+/* ── Attribution Badge ──────────────────────────────────────── */
+
+.editable-block-wrapper {
+  position: relative;
+}
+
+.attribution-badge {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  background: rgba(46, 133, 85, 0.08);
+  border: 1px solid rgba(46, 133, 85, 0.2);
+  border-radius: 20px;
+  opacity: 0.4;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.editable-block-wrapper:hover .attribution-badge {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.avatar-circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.attribution-text {
+  font-size: 11px;
+  color: #555;
+  line-height: 1.3;
+}
+
+.attribution-text strong {
+  color: #2e8555;
+}
+
+.attribution-time {
+  font-size: 10px;
+  color: #888;
+}
+
+/* Dark mode */
+[data-theme='dark'] .attribution-badge {
+  background: rgba(37, 194, 160, 0.1);
+  border-color: rgba(37, 194, 160, 0.25);
+}
+
+[data-theme='dark'] .attribution-text {
+  color: #aaa;
+}
+
+[data-theme='dark'] .attribution-text strong {
+  color: #25c2a0;
+}
+
+/* Portal login input visibility fix */
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+  color: #111111 !important;
+  -webkit-text-fill-color: #111111 !important;
+  font-weight: 600;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: #111111 !important;
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.history-trigger-btn,
+.view-live-btn,
+.logout-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  text-decoration: none;
+  border: none;
+  color: white !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.history-trigger-btn::before,
+.view-live-btn::before,
+.logout-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: all 0.6s;
+}
+
+.history-trigger-btn:hover::before,
+.view-live-btn:hover::before,
+.logout-btn:hover::before {
+  left: 100%;
+}
+
+.history-trigger-btn:hover,
+.view-live-btn:hover,
+.logout-btn:hover {
+  transform: scale(1.05) translateY(-2px);
+  filter: brightness(1.1);
+}
+
+.history-trigger-btn:active,
+.view-live-btn:active,
+.logout-btn:active {
+  transform: scale(0.95);
+}
+
+/* History - Emerald Pulse */
+.history-trigger-btn {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.history-trigger-btn:hover {
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5);
+}
+
+.history-trigger-btn svg {
+  transition: transform 0.5s ease;
+}
+
+.history-trigger-btn:hover svg {
+  transform: rotate(-180deg);
+}
+
+/* View Live - Electric Blue */
+.view-live-btn {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+.view-live-btn:hover {
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
+}
+
+.view-live-btn svg {
+  transition: transform 0.3s ease;
+}
+
+.view-live-btn:hover svg {
+  transform: translate(3px, -3px);
+}
+
+/* Logout - Crimson Blaze */
+.logout-btn {
+  background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+.logout-btn:hover {
+  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.5);
+}
+
+.logout-btn svg {
+  transition: transform 0.3s ease;
+}
+
+.logout-btn:hover svg {
+  transform: translateX(4px);
+}
+/* ── Sidebar Manager ──────────────────────────────────────── */
+
+.new-node-input {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border: 1.5px solid #2e8555;
+  border-radius: 6px;
+  outline: none;
+  color: #111111 !important;
+  -webkit-text-fill-color: #111111 !important;
+  background: #f6faf8;
+  caret-color: #2e8555;
+  box-shadow: 0 0 0 3px rgba(46, 133, 85, 0.1);
+  animation: inputAppear 0.15s ease;
+}
+
+@keyframes inputAppear {
+  from { opacity: 0; transform: scaleX(0.95); }
+  to { opacity: 1; transform: scaleX(1); }
+}
+
+.new-node-input::placeholder {
+  color: #aaa;
+  font-weight: 400;
+}

@@ -1,0 +1,170 @@
+/* Professional SaaS Rich Editor Styles - Light Theme */
+
+.rich-editor-content {
+  color: #374151; /* text-gray-700 */
+  line-height: 1.7;
+  font-size: 14px;
+  outline: none;
+}
+
+.rich-editor-content h1 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.rich-editor-content h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  color: var(--text-primary);
+}
+
+.rich-editor-content h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.rich-editor-content p {
+  margin-bottom: 1.25rem;
+}
+
+.rich-editor-content b, .rich-editor-content strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.rich-editor-content a {
+  color: var(--accent-primary);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.rich-editor-content a:hover {
+  color: var(--accent-hover);
+}
+
+.rich-editor-content blockquote {
+  border-left: 3px solid var(--accent-primary);
+  background: var(--bg-active);
+  padding: 12px 16px;
+  margin: 1.5rem 0;
+  border-radius: 0 4px 4px 0;
+  font-style: normal;
+  color: var(--text-primary);
+}
+
+.rich-editor-content pre {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1rem;
+  margin: 1.5rem 0;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  overflow-x: auto;
+  position: relative;
+}
+
+.rich-editor-content code {
+  font-family: var(--font-mono);
+  background: var(--bg-secondary);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.9em;
+  color: var(--accent-primary);
+}
+
+.rich-editor-content pre code {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+
+.rich-editor-content ul, .rich-editor-content ol {
+  margin-bottom: 1.25rem;
+  padding-left: 1.5rem;
+}
+
+.rich-editor-content li {
+  margin-bottom: 0.5rem;
+}
+
+.rich-editor-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.rich-editor-content th, .rich-editor-content td {
+  border: 1px solid var(--border);
+  padding: 10px 12px;
+  text-align: left;
+}
+
+.rich-editor-content th {
+  background: var(--bg-secondary);
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 13px;
+}
+
+.rich-editor-content hr {
+  border: 0;
+  height: 1px;
+  background: var(--border);
+  margin: 2.5rem 0;
+}
+
+.rich-editor-content img {
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  margin: 1.5rem 0;
+}
+
+/* Tiptap Internal UI */
+.ProseMirror-focused {
+  outline: none;
+}
+
+/* Resizable Media */
+.resizable-image-container, .resizable-video-container {
+  display: inline-block;
+  line-height: 0;
+  margin: 1rem 0;
+  transition: var(--transition);
+}
+
+.resizable-image-container:hover, .resizable-video-container:hover {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* Syntax Highlighting */
+.hljs-comment { color: #9ca3af; font-style: italic; }
+.hljs-keyword { color: #2563eb; }
+.hljs-string { color: #16a34a; }
+.hljs-function { color: #2563eb; }
+.hljs-number { color: #d97706; }
+
+/* Editor Interactions */
+.rich-editor-wrapper {
+  position: relative;
+}
+
+.rich-editor-wrapper.is-editing .rich-editor-content {
+  min-height: 200px;
+}

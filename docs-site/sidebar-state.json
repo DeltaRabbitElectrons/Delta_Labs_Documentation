@@ -1,0 +1,684 @@
+[
+  {
+    "id": "3f5ba0c5-7438-4cd5-962e-5ac0570c7346",
+    "type": "category",
+    "label": "Getting Started",
+    "slug": null,
+    "children": [
+      {
+        "id": "e88f3cb2-9d59-4bc4-8377-a3d97efcf5cc",
+        "type": "page",
+        "label": "Introduction",
+        "slug": "getting-started/introduction",
+        "children": []
+      },
+      {
+        "id": "88698ffb-b694-4448-a2b9-a9ec7bb9a3db",
+        "type": "page",
+        "label": "System Requirements",
+        "slug": "getting-started/system-requirements",
+        "children": []
+      },
+      {
+        "id": "e7ef87c1-5330-4041-94c0-c50c8f65b23d",
+        "type": "page",
+        "label": "Local Setup",
+        "slug": "getting-started/local-setup",
+        "children": []
+      },
+      {
+        "id": "93c5f7a7-e2a0-4583-8066-922cc60e41bb",
+        "type": "page",
+        "label": "First Run",
+        "slug": "getting-started/first-run",
+        "children": []
+      },
+      {
+        "id": "84fb0248-a2d1-40c7-af43-e1a7f7918fd3",
+        "type": "page",
+        "label": "Repo Overview",
+        "slug": "getting-started/repo-overview",
+        "children": []
+      },
+      {
+        "id": "307d2102-7334-4464-800c-847be3d87c8c",
+        "type": "page",
+        "label": "Contributor Workflow",
+        "slug": "getting-started/contributor-workflow",
+        "children": []
+      }
+    ]
+  },
+  {
+    "id": "23472d9e-c84a-459d-862d-526b6f50d632",
+    "type": "category",
+    "label": "Overview",
+    "slug": null,
+    "children": [
+      {
+        "id": "a559f310-7861-45d2-9090-0b6ab91c0fa7",
+        "type": "page",
+        "label": "Overview",
+        "slug": "overview/overview",
+        "children": []
+      },
+      {
+        "id": "f750a5eb-1aa5-4e43-94c6-e428b3c0ebdb",
+        "type": "page",
+        "label": "Project Analysis",
+        "slug": "overview/project-analysis",
+        "children": []
+      }
+    ]
+  },
+  {
+    "id": "d0c3754e-2155-42af-a5da-85247365a422",
+    "type": "category",
+    "label": "Explanation",
+    "slug": null,
+    "children": [
+      {
+        "id": "5de1a63d-4e5e-441c-acb8-be9c98501219",
+        "type": "page",
+        "label": "System Overview",
+        "slug": "explanation/system-overview",
+        "children": []
+      },
+      {
+        "id": "4c4876a4-e0c6-437c-af32-24ecf250c42d",
+        "type": "page",
+        "label": "Design Philosophy",
+        "slug": "explanation/design-philosophy",
+        "children": []
+      },
+      {
+        "id": "ded26a6f-1274-40ff-9df3-60ded75b3bea",
+        "type": "page",
+        "label": "Product Vision",
+        "slug": "explanation/product-vision",
+        "children": []
+      },
+      {
+        "id": "f4359f33-aa26-4a6e-8230-8c145423abd5",
+        "type": "page",
+        "label": "Project Analysis",
+        "slug": "explanation/project-analysis",
+        "children": []
+      },
+      {
+        "id": "2165a402-b055-44fb-93b8-2e0b7e7b9b3d",
+        "type": "page",
+        "label": "Scalability Strategy",
+        "slug": "explanation/scalability-strategy",
+        "children": []
+      },
+      {
+        "id": "48a5661b-a24c-4a1e-9ebc-31114530a12c",
+        "type": "page",
+        "label": "Tradeoffs and Constraints",
+        "slug": "explanation/tradeoffs-and-constraints",
+        "children": []
+      }
+    ]
+  },
+  {
+    "id": "356a1251-3b40-48ca-b3f4-2267ae61d0ae",
+    "type": "category",
+    "label": "Architecture",
+    "slug": null,
+    "children": [
+      {
+        "id": "e54939f9-27d0-4274-bb05-a55913794e7c",
+        "type": "page",
+        "label": "Architecture Intro",
+        "slug": "architecture/architecture-intro",
+        "children": []
+      },
+      {
+        "id": "ede42bd6-2da6-4910-ae73-112f9a1206f1",
+        "type": "page",
+        "label": "Full System Architecture",
+        "slug": "architecture/full-system-architecture",
+        "children": []
+      },
+      {
+        "id": "253be490-1d7e-4d80-82d1-0382075f1cfc",
+        "type": "page",
+        "label": "AI Architecture",
+        "slug": "architecture/ai-architecture",
+        "children": []
+      },
+      {
+        "id": "07cdbe3f-be01-435e-92dc-e2e870bc4db3",
+        "type": "page",
+        "label": "Data Flow",
+        "slug": "architecture/data-flow",
+        "children": []
+      },
+      {
+        "id": "347087db-f44c-4f2c-be2f-a113914d0ef0",
+        "type": "page",
+        "label": "Data Model",
+        "slug": "architecture/data-model",
+        "children": []
+      },
+      {
+        "id": "f7b35ced-5d42-46b2-8daa-e2ef5ff4fc13",
+        "type": "page",
+        "label": "Service Boundaries",
+        "slug": "architecture/service-boundaries",
+        "children": []
+      },
+      {
+        "id": "b2ef8bad-fc49-4528-b443-4f9f90d85cb8",
+        "type": "page",
+        "label": "Integration Points",
+        "slug": "architecture/integration-points",
+        "children": []
+      },
+      {
+        "id": "ff9c8960-b440-4398-929a-ab65679aeae5",
+        "type": "page",
+        "label": "Deployment Architecture",
+        "slug": "architecture/deployment-architecture",
+        "children": []
+      },
+      {
+        "id": "8f12a89f-263d-4669-9dc6-70247e6b0b6a",
+        "type": "page",
+        "label": "Use Cases",
+        "slug": "architecture/use-cases",
+        "children": []
+      }
+    ]
+  },
+  {
+    "id": "6dea5307-74a1-40a5-8d93-1671d9dc40db",
+    "type": "category",
+    "label": "Design System",
+    "slug": null,
+    "children": [
+      {
+        "id": "f9e582a6-7d9c-4e3f-9e80-349dae39c864",
+        "type": "page",
+        "label": "Design Intro",
+        "slug": "design-system/design-intro",
+        "children": []
+      },
+      {
+        "id": "3552bfcc-35b5-495b-a82c-9347cad25394",
+        "type": "page",
+        "label": "Design Principles",
+        "slug": "design-system/design-principles",
+        "children": []
+      },
+      {
+        "id": "1fcaedbb-e327-4611-859c-5610b0077c64",
+        "type": "page",
+        "label": "Design Tokens",
+        "slug": "design-system/design-tokens",
+        "children": []
+      },
+      {
+        "id": "56bb1e37-670c-458d-884f-4e72bd0a5edb",
+        "type": "page",
+        "label": "Design System",
+        "slug": "design-system/design-system",
+        "children": []
+      },
+      {
+        "id": "5b6a2945-fd12-41e4-a372-8866f045d7a5",
+        "type": "page",
+        "label": "API Standards",
+        "slug": "design-system/api-standards",
+        "children": []
+      },
+      {
+        "id": "cb336b89-fffd-45bd-9cad-92026a4c7ed6",
+        "type": "category",
+        "label": "Components",
+        "slug": null,
+        "children": [
+          {
+            "id": "faf343ca-0656-4356-bcd6-d2467330fb27",
+            "type": "page",
+            "label": "Component Catalog",
+            "slug": "design-system/components/component-catalog",
+            "children": []
+          },
+          {
+            "id": "1746e504-b3b4-42b8-bf36-caa8be68d2b1",
+            "type": "page",
+            "label": "Component Doc Template",
+            "slug": "design-system/components/component-doc-template",
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "796519ba-2a0d-43a4-b5c9-7ac82e45dde6",
+    "type": "category",
+    "label": "Development Standards",
+    "slug": null,
+    "children": [
+      {
+        "id": "230c3563-32f7-44a7-875d-33af5f131923",
+        "type": "page",
+        "label": "Standards Intro",
+        "slug": "development-standards/standards-intro",
+        "children": []
+      },
+      {
+        "id": "bb75f1cb-3f54-4d25-be0e-f1dac96fbcee",
+        "type": "page",
+        "label": "Coding Standards",
+        "slug": "development-standards/coding-standards",
+        "children": []
+      },
+      {
+        "id": "3989bbad-9c98-483b-bcfa-c66f5bc1b43e",
+        "type": "page",
+        "label": "Naming Conventions",
+        "slug": "development-standards/naming-conventions",
+        "children": []
+      },
+      {
+        "id": "9b95dc3e-5480-4421-9af3-5195af4ba5f6",
+        "type": "page",
+        "label": "Documentation Rules",
+        "slug": "development-standards/documentation-rules",
+        "children": []
+      },
+      {
+        "id": "f134d545-7e28-4fab-8317-1260e93638ad",
+        "type": "page",
+        "label": "Error Handling",
+        "slug": "development-standards/error-handling",
+        "children": []
+      },
+      {
+        "id": "265514f8-c1d3-4119-a48c-58528fdcaa7b",
+        "type": "page",
+        "label": "Logging Standards",
+        "slug": "development-standards/logging-standards",
+        "children": []
+      }
+    ]
+  },
+  {
+    "id": "e510c940-3b0c-494e-b48b-97dd98a02649",
+    "type": "category",
+    "label": "How-To Guides",
+    "slug": null,
+    "children": [
+      {
+        "id": "2186bb67-99f0-44da-8222-c443bfc40860",
+        "type": "page",
+        "label": "Add New API",
+        "slug": "how-to-guides/add-new-api",
+        "children": []
+      },
+      {
+        "id": "f7977e4f-5101-4cf1-bc9b-ead160e808f9",
+        "type": "page",
+        "label": "Add New Component",
+        "slug": "how-to-guides/add-new-component",
+        "children": []
+      },
+      {
+        "id": "63e68de7-5475-4f3a-a1ff-b9add8933ad1",
+        "type": "page",
+        "label": "Add AI Model",
+        "slug": "how-to-guides/add-ai-model",
+        "children": []
+      },
+      {
+        "id": "e739ac08-efaa-4454-a6fd-4e2c0cf30f9f",
+        "type": "page",
+        "label": "Extend Backend Service",
+        "slug": "how-to-guides/extend-backend-service",
+        "children": []
+      },
+      {
+        "id": "f34fc8fd-4ed4-4c05-a7c4-bdccc94ac6d2",
+        "type": "page",
+        "label": "Handle Migration",
+        "slug": "how-to-guides/handle-migration",
+        "children": []
+      },
+      {
+        "id": "21bce082-d33e-4e1a-97ff-b9084e323175",
+        "type": "page",
+        "label": "Debug Production Issue",
+        "slug": "how-to-guides/debug-production-issue",
+        "children": []
+      }
+    ]
+  },
+  {
+    "id": "119ae17b-1182-4800-a8fa-55bea3beb91c",
+    "type": "category",
+    "label": "API Reference",
+    "slug": null,
+    "children": [
+      {
+        "id": "4a269aee-8936-4e99-85c9-38780a33ab25",
+        "type": "page",
+        "label": "API Reference",
+        "slug": "api-reference/api-reference",
+        "children": []
+      },
+      {
+        "id": "32f2eb8a-7017-4a34-a1e5-2b43f372053d",
+        "type": "page",
+        "label": "Index",
+        "slug": "api-reference/index",
+        "children": []
+      }
+    ]
+  },
+  {
+    "id": "7a5f89b2-37d3-4e4d-b988-380222cef049",
+    "type": "category",
+    "label": "Reference",
+    "slug": null,
+    "children": [
+      {
+        "id": "a58863c5-9a1d-49b9-b13e-05bb187ebe62",
+        "type": "page",
+        "label": "Config Reference",
+        "slug": "reference/config-reference",
+        "children": []
+      },
+      {
+        "id": "f9dd8c18-83c5-4ce5-88a9-59d2d0711bb1",
+        "type": "page",
+        "label": "Environment Variables",
+        "slug": "reference/environment-variables",
+        "children": []
+      },
+      {
+        "id": "a7e1d797-a3e9-4e3d-942c-7b8b9e55ecd7",
+        "type": "page",
+        "label": "Error Codes",
+        "slug": "reference/error-codes",
+        "children": []
+      }
+    ]
+  },
+  {
+    "id": "72be1ce5-9a00-4d6e-86a6-fcc6bb109612",
+    "type": "category",
+    "label": "Best Practices",
+    "slug": null,
+    "children": [
+      {
+        "id": "d3c709af-3c03-4d11-ac02-aff73b05a2c1",
+        "type": "page",
+        "label": "Best Practices Intro",
+        "slug": "best-practices/best-practices-intro",
+        "children": []
+      },
+      {
+        "id": "6e6b8d6f-b4fe-490c-a054-cb5b3d29f435",
+        "type": "page",
+        "label": "Best Practices",
+        "slug": "best-practices/best-practices",
+        "children": []
+      }
+    ]
+  },
+  {
+    "id": "ef2d822c-f2b9-4e6d-8f5e-e96f1fca9d32",
+    "type": "category",
+    "label": "Security",
+    "slug": null,
+    "children": [
+      {
+        "id": "c4fbd27c-80e8-406b-a8bb-070b78594ae3",
+        "type": "page",
+        "label": "Security Overview",
+        "slug": "security/security-overview",
+        "children": []
+      },
+      {
+        "id": "08954c02-9b1d-4f96-8f8f-ae910bffa54c",
+        "type": "page",
+        "label": "Authentication",
+        "slug": "security/authentication",
+        "children": []
+      },
+      {
+        "id": "55ac8a65-df81-4212-9268-71b4fb9ec29f",
+        "type": "page",
+        "label": "Authorization",
+        "slug": "security/authorization",
+        "children": []
+      },
+      {
+        "id": "2a9d16e1-b534-4c21-97e1-be37bcd8395a",
+        "type": "page",
+        "label": "Data Privacy",
+        "slug": "security/data-privacy",
+        "children": []
+      },
+      {
+        "id": "de6612d2-f64b-4abb-917f-11136d9375e8",
+        "type": "page",
+        "label": "Secrets Management",
+        "slug": "security/secrets-management",
+        "children": []
+      },
+      {
+        "id": "41245320-b952-467c-bf13-d56882011689",
+        "type": "page",
+        "label": "Threat Model",
+        "slug": "security/threat-model",
+        "children": []
+      }
+    ]
+  },
+  {
+    "id": "ffb35b3b-99f5-4669-b059-5e0c8cb0735b",
+    "type": "category",
+    "label": "Operations",
+    "slug": null,
+    "children": [
+      {
+        "id": "1ccb3e25-ccd8-46d6-be7e-44bf180009f0",
+        "type": "page",
+        "label": "Environments",
+        "slug": "operations/environments",
+        "children": []
+      },
+      {
+        "id": "2537316c-0e5b-4f65-9971-faee663a42b0",
+        "type": "page",
+        "label": "CI/CD",
+        "slug": "operations/ci-cd",
+        "children": []
+      },
+      {
+        "id": "782c146c-4201-4697-8d6e-2ad865d3330a",
+        "type": "page",
+        "label": "Monitoring & Logging",
+        "slug": "operations/monitoring-logging",
+        "children": []
+      },
+      {
+        "id": "24a18313-8b61-4a02-99b4-a065c933dbaa",
+        "type": "page",
+        "label": "Alerting",
+        "slug": "operations/alerting",
+        "children": []
+      },
+      {
+        "id": "b02152e6-6f48-4094-9ddc-8a39d8eab4c6",
+        "type": "page",
+        "label": "Incident Response",
+        "slug": "operations/incident-response",
+        "children": []
+      },
+      {
+        "id": "86899c6d-b978-4fdf-9565-6bc06cfed01a",
+        "type": "page",
+        "label": "Backup & Recovery",
+        "slug": "operations/backup-recovery",
+        "children": []
+      }
+    ]
+  },
+  {
+    "id": "f329f6e2-b4d2-4fce-b93d-45f39ad82d38",
+    "type": "category",
+    "label": "Testing & Quality",
+    "slug": null,
+    "children": [
+      {
+        "id": "23f84179-31d4-49b4-b21c-ff33661c4be4",
+        "type": "page",
+        "label": "Testing Strategy",
+        "slug": "testing-quality/testing-strategy",
+        "children": []
+      },
+      {
+        "id": "3dca40d8-c748-4602-a1c4-112d6f30050e",
+        "type": "page",
+        "label": "Unit Testing",
+        "slug": "testing-quality/unit-testing",
+        "children": []
+      },
+      {
+        "id": "d64c1acf-3061-4cad-b232-e826f41e51cd",
+        "type": "page",
+        "label": "Integration Testing",
+        "slug": "testing-quality/integration-testing",
+        "children": []
+      },
+      {
+        "id": "9790fdd0-2060-493c-97e9-d611d64fc8de",
+        "type": "page",
+        "label": "E2E Testing",
+        "slug": "testing-quality/e2e-testing",
+        "children": []
+      },
+      {
+        "id": "96c93b12-a361-451c-a151-d49767a1d42a",
+        "type": "page",
+        "label": "Quality Gates",
+        "slug": "testing-quality/quality-gates",
+        "children": []
+      }
+    ]
+  },
+  {
+    "id": "1da2e197-3246-4bc5-8cd0-1d6bc144532a",
+    "type": "category",
+    "label": "Process",
+    "slug": null,
+    "children": [
+      {
+        "id": "2e15bf01-cf86-41ed-8120-a29104f1ccee",
+        "type": "page",
+        "label": "Process Intro",
+        "slug": "process/process-intro",
+        "children": []
+      },
+      {
+        "id": "39d78a97-a91a-4238-a489-62d757484750",
+        "type": "page",
+        "label": "CI/CD Branch & PR",
+        "slug": "process/cicd-branch-pr",
+        "children": []
+      }
+    ]
+  },
+  {
+    "id": "4207d804-eb01-4ad7-aa3b-4efbb0bc1f5a",
+    "type": "category",
+    "label": "Release Management",
+    "slug": null,
+    "children": [
+      {
+        "id": "47cd2ea4-d3db-4468-b358-c975b130f9dc",
+        "type": "page",
+        "label": "Versioning",
+        "slug": "release-management/versioning",
+        "children": []
+      },
+      {
+        "id": "eed055a1-bfe4-4321-81a7-6e7adbcf8312",
+        "type": "page",
+        "label": "Release Process",
+        "slug": "release-management/release-process",
+        "children": []
+      },
+      {
+        "id": "2a49c730-0c78-4970-bb2d-08550a61b70d",
+        "type": "page",
+        "label": "Rollback Strategy",
+        "slug": "release-management/rollback-strategy",
+        "children": []
+      },
+      {
+        "id": "0e73122a-b815-4f65-a2e4-1896ffc1926d",
+        "type": "page",
+        "label": "Deprecation Policy",
+        "slug": "release-management/deprecation-policy",
+        "children": []
+      }
+    ]
+  },
+  {
+    "id": "076d6d31-6dce-46d5-9e94-317ba6657a41",
+    "type": "category",
+    "label": "Templates",
+    "slug": null,
+    "children": [
+      {
+        "id": "603ce634-c563-43f6-86aa-98b84e5387aa",
+        "type": "page",
+        "label": "Templates",
+        "slug": "templates/templates",
+        "children": []
+      },
+      {
+        "id": "0220fdc1-8ba4-461a-8257-5f23a911c30f",
+        "type": "page",
+        "label": "ADR Template",
+        "slug": "templates/adr-template",
+        "children": []
+      },
+      {
+        "id": "49e7352e-b6d9-465e-b690-4d5744f0c033",
+        "type": "page",
+        "label": "API Doc Template",
+        "slug": "templates/api-doc-template",
+        "children": []
+      },
+      {
+        "id": "92a1ea7f-ae79-4678-adc0-8e91a32a60cf",
+        "type": "page",
+        "label": "Component Doc Template",
+        "slug": "templates/component-doc-template",
+        "children": []
+      },
+      {
+        "id": "1d8f75a0-68f7-4370-b585-1cfdba89134c",
+        "type": "page",
+        "label": "How-To Template",
+        "slug": "templates/how-to-template",
+        "children": []
+      },
+      {
+        "id": "9cd6b47b-f410-40ca-a783-d2a254ad549f",
+        "type": "page",
+        "label": "Index",
+        "slug": "templates/index",
+        "children": []
+      }
+    ]
+  }
+]
