@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ToastProvider } from "@/components/Toast";
+import GoogleAuthProvider from "@/components/GoogleAuthProvider";
 
 export const metadata: Metadata = {
   title: "Delta Labs | Admin Portal",
@@ -20,9 +21,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
-        <ToastProvider>
-          {children}
-        </ToastProvider>
+        <GoogleAuthProvider>
+          <ToastProvider>
+            {children}
+          </ToastProvider>
+        </GoogleAuthProvider>
       </body>
     </html>
   );

@@ -13,15 +13,23 @@ if (fs.existsSync(dynamicDocsPath)) {
     // Only process directories
     const fullPath = path.join(dynamicDocsPath, slug);
     if (fs.statSync(fullPath).isDirectory()) {
-      dynamicDocsPlugins.push([
-        '@docusaurus/plugin-content-docs',
-        {
-          id: slug,
-          path: `workspaces/${slug}`,
-          routeBasePath: `workspace/${slug}`,
-          sidebarPath: `./sidebars-${slug}.json`,
-        }
-      ]);
+      // Docusaurus fails if a plugin has no documents.
+      // We check if at least one .md file exists in the directory.
+      const hasDocs = fs.readdirSync(fullPath).some(file => file.endsWith('.md'));
+      
+      if (hasDocs) {
+        dynamicDocsPlugins.push([
+          '@docusaurus/plugin-content-docs',
+          {
+            id: slug,
+            path: `workspaces/${slug}`,
+            routeBasePath: `workspace/${slug}`,
+            sidebarPath: `./sidebars-${slug}.json`,
+          }
+        ]);
+      } else {
+        console.warn(`[Docusaurus] Skipping workspace "${slug}" because it contains no documents.`);
+      }
     }
   });
 }
@@ -38,13 +46,13 @@ const config: Config = {
     preprocessor: ({filePath, fileContent}) => {
       return fileContent;
     },
+    onBrokenMarkdownLinks: 'warn',
     mdx1Compat: {
       comments: true,
       admonitions: true,
       headingIds: true,
     },
   },
-  onBrokenMarkdownLinks: 'warn', // Wait, the warning said move it.
   organizationName: 'Dink',
   projectName: 'delta-labs-docs',
 

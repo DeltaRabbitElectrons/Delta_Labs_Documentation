@@ -90,6 +90,10 @@ async function sync() {
 
       // 3a. Process Pages (Save as .md files)
       const pages = workspace.pages || [];
+      if (pages.length === 0) {
+        console.log(`   ⚠️ Skip: Workspace "${workspace.name}" has no pages.`);
+        continue;
+      }
       console.log(`   📄 ${pages.length} page(s) to sync`);
 
       for (const page of pages) {

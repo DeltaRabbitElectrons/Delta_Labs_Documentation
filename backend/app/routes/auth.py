@@ -2,13 +2,68 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
 from app.database import get_db
-from app.auth.jwt import hash_pw, verify_pw
+from app.auth.jwt import hash_pw, verify_pw, make_token
 from app.services import otp_service, email_service
+from app.config import settings
+from google.oauth2 import id_token
+from google.auth.transport import requests
 import logging
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
+
+class GoogleLoginIn(BaseModel):
+    token: str
+
+@router.post('/google')
+async def google_login(body: GoogleLoginIn):
+    try:
+        # 1. Verify the Google ID Token
+        id_info = id_token.verify_oauth2_token(
+            body.token, 
+            requests.Request(), 
+            settings.GOOGLE_CLIENT_ID
+        )
+
+        email = id_info['email']
+        db = get_db()
+        user = await db.users.find_one({'email': email})
+
+        if not user:
+             raise HTTPException(404, 'No account found with this email. Please register first.')
+        
+        if user.get('status', 'pending') != 'approved':
+            raise HTTPException(403, 'Your account is pending approval by a super admin.')
+
+        # 2. Trigger OTP (Factor 2)
+        print(f"[GOOGLE-LOGIN] Google verified for {email}, triggering OTP")
+        
+        otp = otp_service.generate_otp()
+        await otp_service.save_otp(str(user['_id']), otp)
+
+        # Send Email OTP
+        try:
+            await email_service.send_otp_email(user.get('name', 'Admin'), user['email'], otp)
+        except Exception as e:
+            logger.error(f"[GOOGLE-LOGIN] OTP email failed for {user['email']}: {str(e)}")
+            raise HTTPException(
+                status_code=500,
+                detail=f"Could not send verification code to {user['email']}. Error: {str(e)}"
+            )
+
+        return {
+            'requires_otp': True,
+            'email': user['email'],
+            'message': "Verification code sent to your email"
+        }
+
+    except ValueError as e:
+        logger.error(f"Google Token Verification Failed: {str(e)}")
+        raise HTTPException(status_code=400, detail="Invalid Google token")
+    except Exception as e:
+        logger.error(f"Error during Google Login: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error during Google login")
 
 # ─── TEMPORARY DEBUG ROUTE — remove after fixing email ────────────────────────
 @router.get('/debug/test-email')

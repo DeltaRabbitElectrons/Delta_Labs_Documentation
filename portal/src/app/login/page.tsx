@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Eye, EyeOff, Loader2, AlertCircle } from 'lucide-react';
 import { api } from '@/lib/api';
+import { GoogleLogin } from '@react-oauth/google';
 
 type View = 'login' | 'request-otp' | 'verify-otp';
 
@@ -143,6 +144,31 @@ export default function Login() {
     }
   };
 
+  const handleGoogleSuccess = async (credentialResponse: any) => {
+    setLoginLoading(true);
+    setLoginError('');
+    try {
+      const res: any = await api.post('/auth/google', { token: credentialResponse.credential });
+      
+      if (res.requires_otp) {
+        sessionStorage.setItem('otp_email', res.email);
+        router.push('/verify-otp');
+        return;
+      }
+
+      // Fallback (if OTP were bypassed in future)
+      localStorage.setItem('portal_token', res.access_token);
+      localStorage.setItem('role', res.role);
+      localStorage.setItem('name', res.name);
+      localStorage.setItem('email', res.email);
+      router.push('/docs');
+    } catch (err: any) {
+      setLoginError(err.detail || err.message || 'Google Login failed');
+    } finally {
+      setLoginLoading(false);
+    }
+  };
+
   const handleRequestOTP = async (e: React.FormEvent) => {
     e.preventDefault();
     setOtpLoading(true);
@@ -274,6 +300,26 @@ export default function Login() {
                 'Sign in'
               )}
             </button>
+
+            <div className="relative my-8">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-[#f1f5f9]"></div>
+              </div>
+              <div className="relative flex justify-center text-[12px] uppercase">
+                <span className="bg-white px-3 text-[#9ca3af] font-medium">or continue with</span>
+              </div>
+            </div>
+
+            <div className="flex justify-center w-full">
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={() => setLoginError('Google Login Failed')}
+                useOneTap
+                theme="outline"
+                shape="rectangular"
+                locale="en"
+              />
+            </div>
             <div className="mt-8 pt-6 border-t border-[#f1f5f9] text-center">
               <p className="text-[13px] text-[#64748b]">
                 Don't have an account?{' '}
