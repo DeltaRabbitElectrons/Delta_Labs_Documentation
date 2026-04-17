@@ -46,6 +46,7 @@ export default function EditableDocs() {
   const [page, setPage] = useState<PageData | null>(null);
   const [showHistory, setShowHistory] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [pageLoading, setPageLoading] = useState(true);
   const [changeMap, setChangeMap] = useState<Record<string, ChangeLogEntry>>({});
   const [isNewPage] = useState(false);
 
@@ -58,7 +59,8 @@ export default function EditableDocs() {
 
   const loadPage = async (targetSlug: string) => {
     try {
-      setPage(null);
+      setPageLoading(true);
+      // We purposefully DO NOT setPage(null) here so the sidebar/navbar remain visible
       setChangeMap({});
       const data = await api.get<PageData>(`/pages/${targetSlug}`);
       setPage(data);
@@ -69,6 +71,8 @@ export default function EditableDocs() {
       setChangeMap(map);
     } catch {
       router.push('/docs');
+    } finally {
+      setPageLoading(false);
     }
   };
 
@@ -97,7 +101,7 @@ export default function EditableDocs() {
       <main className="pl-[var(--sidebar-width,280px)] pt-[52px] min-h-screen flex flex-col items-center">
         {loading && <LoadingScreen message="Synchronizing Changes" fullScreen={true} />}
 
-        <div className="w-full max-w-[800px] px-12 py-20 animate-fade-in">
+        <div className={`w-full max-w-[800px] px-12 py-20 transition-opacity duration-300 ${pageLoading ? 'opacity-30 pointer-events-none blur-[2px]' : 'opacity-100'}`}>
           {/* Breadcrumb Context */}
           <div className="flex items-center gap-2 mb-10 text-[var(--text-muted)] text-[12px] font-medium uppercase tracking-[0.05em]">
             <span>Documentation</span>
