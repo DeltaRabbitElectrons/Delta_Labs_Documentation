@@ -61,6 +61,26 @@ export default function VerifyOTP() {
     }
   };
 
+  const handlePaste = (e: React.ClipboardEvent) => {
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+    if (!pastedData) return;
+    
+    const newOtp = [...otp];
+    for (let i = 0; i < pastedData.length; i++) {
+        newOtp[i] = pastedData[i];
+    }
+    setOtp(newOtp);
+    
+    const focusIndex = Math.min(pastedData.length, 5);
+    inputRefs.current[focusIndex]?.focus();
+    
+    // Automatically verify if 6 digits pasted
+    if (pastedData.length === 6) {
+        setTimeout(() => handleVerify(), 0);
+    }
+  };
+
   const handleVerify = async (e?: React.FormEvent) => {
     e?.preventDefault();
     
@@ -166,6 +186,7 @@ export default function VerifyOTP() {
                 value={digit}
                 onChange={(e) => handleOtpChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
+                onPaste={handlePaste}
                 className="w-12 h-14 text-center text-[20px] font-bold border border-[var(--border)] rounded-[8px] focus:border-[var(--accent-primary)] focus:ring-[3px] focus:ring-[var(--focus-ring)] outline-none transition-all"
               />
             ))}
