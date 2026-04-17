@@ -7,6 +7,7 @@ passlib[bcrypt]==1.7.4
 python-dotenv==1.2.1
 PyGithub==2.8.1
 httpx
+google-auth==2.38.0
 python-multipart
 resend==2.23.0
 markdownify
