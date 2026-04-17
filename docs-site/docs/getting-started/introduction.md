@@ -4,7 +4,7 @@ sidebar_label: Introduction
 id: getting-started/introduction
 ---
 
-# Welcome to De;ta Labs Documentation
+# Welcome to Delta Labs Documentation
 
 **Official documentation for Delta Labs: coding standards, design system, architecture, API reference, and development guidelines.**
 
