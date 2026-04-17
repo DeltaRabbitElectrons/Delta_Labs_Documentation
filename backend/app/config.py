@@ -31,6 +31,8 @@ class Settings(BaseSettings):
     SMTP_USER: str = ''
     SMTP_PASSWORD: str = ''
     GOOGLE_SCRIPT_URL: str = ''
+    GOOGLE_CLIENT_ID: str = ''
+    GOOGLE_CLIENT_SECRET: str = ''
 
     class Config:
         env_file = '.env'
