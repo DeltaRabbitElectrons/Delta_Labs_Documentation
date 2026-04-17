@@ -1,3 +1,33 @@
 {
-  "sidebar_folder-structure": []
+  "sidebar_folder-structure": [
+    {
+      "type": "category",
+      "label": "Deltalabs_Frontend",
+      "collapsible": true,
+      "collapsed": false,
+      "items": [
+        {
+          "type": "category",
+          "label": "src",
+          "collapsible": true,
+          "collapsed": false,
+          "items": [
+            {
+              "type": "category",
+              "label": "app",
+              "collapsible": true,
+              "collapsed": false,
+              "items": [
+                {
+                  "type": "doc",
+                  "id": "layouttsx",
+                  "label": "layout.tsx"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
