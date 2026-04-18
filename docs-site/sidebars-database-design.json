@@ -10,11 +10,6 @@
           "type": "doc",
           "id": "what-database-architecture-deltalabs-uses",
           "label": "What database architecture DeltaLabs uses"
-        },
-        {
-          "type": "doc",
-          "id": "how-we-access-mongodb",
-          "label": "How we access MongoDB"
         }
       ]
     }
