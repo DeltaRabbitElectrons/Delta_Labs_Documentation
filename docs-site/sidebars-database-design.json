@@ -2,7 +2,7 @@
   "sidebar_database-design": [
     {
       "type": "category",
-      "label": "Database architecture",
+      "label": "DeltaLabs \u2014 Database",
       "collapsible": true,
       "collapsed": false,
       "items": [
