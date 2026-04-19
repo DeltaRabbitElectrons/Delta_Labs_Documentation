@@ -32,32 +32,13 @@ Primary persistent store for all domain entities
 
 <span style="color: rgb(204, 204, 204);">All document </span> `_id` <span style="color: rgb(204, 204, 204);">fields use </span> **application-generated UUIDs** <span style="color: rgb(204, 204, 204);">(</span>`uuid4()`<span style="color: rgb(204, 204, 204);">) as strings, except for collections with domain-specific prefixes (e.g. </span> `school_`<span style="color: rgb(204, 204, 204);">, </span> `mkt_`<span style="color: rgb(204, 204, 204);">, </span> `offer_`<span style="color: rgb(204, 204, 204);">, </span> `feat_`<span style="color: rgb(204, 204, 204);">).</span>
 
-Parameter
-
-Default
-
-Description
-
-<span style="color: rgb(215, 186, 125);">MONGODB_URI</span>
-
-<span style="color: rgb(215, 186, 125);">mongodb://localhost:27017</span>
-
-MongoDB connection string
-
-<span style="color: rgb(215, 186, 125);">MONGODB_DB_NAME</span>
-
-<span style="color: rgb(215, 186, 125);">deltalabs</span>
-
-Target Database name
-
-```markdown
-| Parameter | Default | Description |
-|---|---|---|
-| `MONGODB_URI` | `mongodb://localhost:27017` | MongoDB connection string |
-| `MONGODB_DB_NAME` | `deltalabs` | Target database name |
-| `MONGODB_MAX_POOL_SIZE` | `100` | Maximum connection pool size |
-| `MONGODB_MIN_POOL_SIZE` | `0` | Minimum connection pool size |
-| `MONGODB_SERVER_SELECTION_TIMEOUT_MS` | `5000` | Server selection timeout |
-| `REDIS_URL` | `redis://localhost:6379/0` | Redis connection URL |
-| `REDIS_MAX_CONNECTIONS` | `50` | Maximum async pool connections |
-```
+**| Parameter | Default | Description |  
+|---|---|---|  
+| \`MONGODB\_URI\` | \`mongodb://localhost:27017\` | MongoDB connection string |  
+| \`MONGODB\_DB\_NAME\` | \`deltalabs\` | Target database name |  
+| \`MONGODB\_MAX\_POOL\_SIZE\` | \`100\` | Maximum connection pool size |  
+| \`MONGODB\_MIN\_POOL\_SIZE\` | \`0\` | Minimum connection pool size |  
+| \`MONGODB\_SERVER\_SELECTION\_TIMEOUT\_MS\` | \`5000\` | Server selection timeout |  
+| \`REDIS\_URL\` | \`redis://localhost:6379/0\` | Redis connection URL |  
+| \`REDIS\_MAX\_CONNECTIONS\` | \`50\` | Maximum async pool connections |  
+**
