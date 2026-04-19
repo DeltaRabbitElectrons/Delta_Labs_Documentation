@@ -18,18 +18,8 @@
         },
         {
           "type": "doc",
-          "id": "what-database-architecture-deltalabs-uses",
-          "label": "What database architecture DeltaLabs uses"
-        },
-        {
-          "type": "doc",
-          "id": "how-we-access-mongodb",
-          "label": "How we access MongoDB"
-        },
-        {
-          "type": "doc",
-          "id": "how-we-access-redis",
-          "label": "How we access Redis"
+          "id": "entity-relationship-diagram",
+          "label": "Entity-Relationship Diagram"
         }
       ]
     }
