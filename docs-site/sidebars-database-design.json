@@ -13,6 +13,11 @@
         },
         {
           "type": "doc",
+          "id": "architecture",
+          "label": "Architecture"
+        },
+        {
+          "type": "doc",
           "id": "what-database-architecture-deltalabs-uses",
           "label": "What database architecture DeltaLabs uses"
         },
