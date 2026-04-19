@@ -30,7 +30,17 @@
             {
               "type": "doc",
               "id": "users",
-              "label": "Users"
+              "label": "users"
+            },
+            {
+              "type": "doc",
+              "id": "usersessions",
+              "label": "user_sessions"
+            },
+            {
+              "type": "doc",
+              "id": "orgs",
+              "label": "orgs"
             }
           ]
         }
