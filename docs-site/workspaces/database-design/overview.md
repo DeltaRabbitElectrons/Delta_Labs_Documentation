@@ -32,7 +32,7 @@ Primary persistent store for all domain entities
 
 <span style="color: rgb(204, 204, 204);">All document </span> `_id` <span style="color: rgb(204, 204, 204);">fields use </span> **application-generated UUIDs** <span style="color: rgb(204, 204, 204);">(</span>`uuid4()`<span style="color: rgb(204, 204, 204);">) as strings, except for collections with domain-specific prefixes (e.g. </span> `school_`<span style="color: rgb(204, 204, 204);">, </span> `mkt_`<span style="color: rgb(204, 204, 204);">, </span> `offer_`<span style="color: rgb(204, 204, 204);">, </span> `feat_`<span style="color: rgb(204, 204, 204);">).</span>
 
-**| Parameter | Default | Description |  
+\*\*| Parameter | Default | Description |  
 |---|---|---|  
 | \`MONGODB\_URI\` | \`mongodb://localhost:27017\` | MongoDB connection string |  
 | \`MONGODB\_DB\_NAME\` | \`deltalabs\` | Target database name |  
@@ -41,4 +41,4 @@ Primary persistent store for all domain entities
 | \`MONGODB\_SERVER\_SELECTION\_TIMEOUT\_MS\` | \`5000\` | Server selection timeout |  
 | \`REDIS\_URL\` | \`redis://localhost:6379/0\` | Redis connection URL |  
 | \`REDIS\_MAX\_CONNECTIONS\` | \`50\` | Maximum async pool connections |  
-**
+\*\*
