@@ -46,10 +46,8 @@ Description
 
 MongoDB connection string
 
-  
-
 <span style="color: rgb(215, 186, 125);">MONGODB_DB_NAME</span>
 
 <span style="color: rgb(215, 186, 125);">deltalabs</span>
 
-Target database name
+Target Database name
