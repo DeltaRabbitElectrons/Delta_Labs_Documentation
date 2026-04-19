@@ -20,6 +20,19 @@
           "type": "doc",
           "id": "entity-relationship-diagram",
           "label": "Entity-Relationship Diagram"
+        },
+        {
+          "type": "category",
+          "label": "MongoDB Collections",
+          "collapsible": true,
+          "collapsed": false,
+          "items": [
+            {
+              "type": "doc",
+              "id": "users",
+              "label": "Users"
+            }
+          ]
         }
       ]
     }
