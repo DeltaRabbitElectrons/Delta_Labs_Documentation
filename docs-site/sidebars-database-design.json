@@ -41,6 +41,86 @@
               "type": "doc",
               "id": "orgs",
               "label": "orgs"
+            },
+            {
+              "type": "doc",
+              "id": "orgmemberships",
+              "label": "org_memberships"
+            },
+            {
+              "type": "doc",
+              "id": "roledefinitions",
+              "label": "role_definitions"
+            },
+            {
+              "type": "doc",
+              "id": "rolebindings",
+              "label": "role_bindings"
+            },
+            {
+              "type": "doc",
+              "id": "relationships",
+              "label": "relationships"
+            },
+            {
+              "type": "doc",
+              "id": "contentitems",
+              "label": "content_items"
+            },
+            {
+              "type": "doc",
+              "id": "contentlikes",
+              "label": "content_likes"
+            },
+            {
+              "type": "doc",
+              "id": "contentsaves",
+              "label": "content_saves"
+            },
+            {
+              "type": "doc",
+              "id": "contentcomments",
+              "label": "content_comments"
+            },
+            {
+              "type": "doc",
+              "id": "contentshares",
+              "label": "content_shares"
+            },
+            {
+              "type": "doc",
+              "id": "contentevents",
+              "label": "content_events"
+            },
+            {
+              "type": "doc",
+              "id": "schools",
+              "label": "schools"
+            },
+            {
+              "type": "doc",
+              "id": "schoolmemberships",
+              "label": "school_memberships"
+            },
+            {
+              "type": "doc",
+              "id": "schoolmarketplace",
+              "label": "school_marketplace"
+            },
+            {
+              "type": "doc",
+              "id": "schooloffers",
+              "label": "school_offers"
+            },
+            {
+              "type": "doc",
+              "id": "mediaassets",
+              "label": "media_assets"
+            },
+            {
+              "type": "doc",
+              "id": "featurecatalog",
+              "label": "feature_catalog"
             }
           ]
         }
