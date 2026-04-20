@@ -33,7 +33,7 @@ const turndown = new TurndownService({
   bulletListMarker: "-",
 });
 
-turndown.keep(['span', 'mark', 'video', 'source', 'iframe', 'img']);
+turndown.keep(['span', 'mark', 'video', 'source', 'iframe', 'img', 'table', 'thead', 'tbody', 'tr', 'th', 'td']);
 
 turndown.addRule('resizableImage', {
   filter: 'img',
@@ -55,6 +55,8 @@ turndown.addRule('resizableImage', {
     return `![](${src})`;
   }
 });
+
+
 
 interface ChangeLogEntry {
   block_id: string;

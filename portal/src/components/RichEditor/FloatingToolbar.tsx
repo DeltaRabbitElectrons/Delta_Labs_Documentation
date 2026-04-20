@@ -270,8 +270,21 @@ export default function FloatingToolbar({ editor }: FloatingToolbarProps) {
           <div className="flex bg-slate-50 p-1 rounded-[10px] gap-0.5 border border-slate-100">
             <ToolBtn icon={Code} label="Inline Code" active={editor.isActive('code')} onClick={() => editor.chain().focus().toggleCode().run()} />
             <ToolBtn icon={Code2} label="Code Block" active={editor.isActive('codeBlock')} onClick={() => editor.chain().focus().toggleCodeBlock().run()} />
-            <ToolBtn icon={TableIcon} label="Insert Table" onClick={() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()} />
+            <ToolBtn icon={TableIcon} label="Insert Table" active={editor.isActive('table')} onClick={() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()} />
           </div>
+
+          {/* Table Management Actions — only show when inside a table */}
+          {editor.isActive('table') && (
+            <div className="flex bg-blue-50 p-1 rounded-[10px] gap-0.5 border border-blue-100 animate-in fade-in zoom-in duration-200">
+               <ToolBtn icon={() => <div className="text-[10px] font-bold">R+</div>} label="Add Row Below" onClick={() => editor.chain().focus().addRowAfter().run()} />
+               <ToolBtn icon={() => <div className="text-[10px] font-bold">R-</div>} label="Delete Row" onClick={() => editor.chain().focus().deleteRow().run()} danger />
+               <div className="w-px h-4 bg-blue-200 my-auto mx-0.5" />
+               <ToolBtn icon={() => <div className="text-[10px] font-bold">C+</div>} label="Add Col After" onClick={() => editor.chain().focus().addColumnAfter().run()} />
+               <ToolBtn icon={() => <div className="text-[10px] font-bold">C-</div>} label="Delete Col" onClick={() => editor.chain().focus().deleteColumn().run()} danger />
+               <div className="w-px h-4 bg-blue-200 my-auto mx-0.5" />
+               <ToolBtn icon={Trash2} label="Delete Table" onClick={() => editor.chain().focus().deleteTable().run()} danger />
+            </div>
+          )}
 
           {/* Link */}
           <div className="flex bg-slate-50 p-1 rounded-[10px] gap-0.5 border border-slate-100 relative">

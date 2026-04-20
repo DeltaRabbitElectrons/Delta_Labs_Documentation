@@ -101,24 +101,59 @@
 
 .rich-editor-content table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   margin: 1.5rem 0;
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 8px;
   overflow: hidden;
+  table-layout: fixed;
 }
 
 .rich-editor-content th, .rich-editor-content td {
-  border: 1px solid var(--border);
-  padding: 10px 12px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
   text-align: left;
+  min-width: 100px;
+  position: relative;
+}
+
+.rich-editor-content th:last-child, .rich-editor-content td:last-child {
+  border-right: 0;
+}
+
+.rich-editor-content tr:last-child td {
+  border-bottom: 0;
 }
 
 .rich-editor-content th {
-  background: var(--bg-secondary);
-  font-weight: 600;
+  background: #f8fafc; /* slate-50 */
+  font-weight: 700;
   color: var(--text-primary);
-  font-size: 13px;
+  font-size: 12px;
+  text-transform: uppercase;
+  tracking: 0.05em;
+}
+
+/* Tiptap Table Selection */
+.rich-editor-content .selectedCell:after {
+  z-index: 2;
+  position: absolute;
+  content: "";
+  left: 0; right: 0; top: 0; bottom: 0;
+  background: rgba(37, 99, 235, 0.08); /* accent primary translucent */
+  pointer-events: none;
+}
+
+.rich-editor-content .column-resize-handle {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: -2px;
+  width: 4px;
+  background-color: var(--accent-primary);
+  pointer-events: none;
 }
 
 .rich-editor-content hr {
