@@ -125,9 +125,17 @@
           ]
         },
         {
-          "type": "doc",
-          "id": "ji",
-          "label": "ji"
+          "type": "category",
+          "label": "Index Catalog",
+          "collapsible": true,
+          "collapsed": false,
+          "items": [
+            {
+              "type": "doc",
+              "id": "page",
+              "label": "page"
+            }
+          ]
         }
       ]
     }
