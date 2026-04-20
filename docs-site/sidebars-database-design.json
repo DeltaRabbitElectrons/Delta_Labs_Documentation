@@ -123,6 +123,11 @@
               "label": "feature_catalog"
             }
           ]
+        },
+        {
+          "type": "doc",
+          "id": "ji",
+          "label": "ji"
         }
       ]
     }
