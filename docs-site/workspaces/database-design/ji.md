@@ -1,9 +1,9 @@
 ---
-title: ji
-sidebar_label: ji
+title: Ws:Database Design:Ji
+sidebar_label: Ws:Database Design:Ji
 id: ji
 ---
 
 # ji
 
-Start writing here...
+Start writing heiore...
