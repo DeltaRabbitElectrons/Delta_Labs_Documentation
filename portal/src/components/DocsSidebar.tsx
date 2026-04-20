@@ -15,7 +15,9 @@ import {
   Check,
   X,
   FolderPlus,
-  FilePlus2
+  FilePlus2,
+  PanelLeftClose,
+  PanelLeftOpen
 } from 'lucide-react';
 import { 
   DndContext, 
@@ -68,6 +70,7 @@ export default function DocsSidebar({
   const [sidebarWidth, setSidebarWidth] = useState(280);
   const [deleteTarget, setDeleteTarget] = useState<{ id: string; slug?: string; label: string; type: string } | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const isResizing = useRef(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
   const { addToast } = useToasts();
@@ -411,10 +414,21 @@ export default function DocsSidebar({
         </div>
       </div>
     )}
+    {isCollapsed && (
+      <button
+        onClick={() => setIsCollapsed(false)}
+        className="fixed left-6 top-[72px] z-[100] w-10 h-10 bg-white border border-slate-200 rounded-xl shadow-xl flex items-center justify-center text-[var(--accent-primary)] hover:bg-[var(--accent-light)] transition-all duration-300 group animate-in slide-in-from-left-4 fade-in"
+        title="Show Sidebar"
+      >
+        <PanelLeftOpen size={20} className="group-hover:scale-110 transition-transform" />
+      </button>
+    )}
     <div 
       ref={sidebarRef}
-      className="fixed left-0 top-[52px] bottom-0 bg-white border-r border-[var(--border)] flex flex-col z-[50] shadow-sm group/sidebar"
-      style={{ width: `${sidebarWidth}px` }}
+      className={`fixed left-0 top-[52px] bottom-0 bg-white border-r border-[var(--border)] flex flex-col z-[50] shadow-sm group/sidebar transition-all duration-300 ease-in-out
+        ${isCollapsed ? '-translate-x-full opacity-0' : 'translate-x-0 opacity-100'}
+      `}
+      style={{ width: isCollapsed ? '0px' : `${sidebarWidth}px` }}
     >
       
       {/* Brand & Global Controls */}
@@ -440,6 +454,14 @@ export default function DocsSidebar({
                  title="New Page"
                >
                  <FilePlus2 size={16} />
+               </button>
+               <div className="w-px h-4 bg-slate-200/50 mx-1" />
+               <button 
+                 onClick={() => setIsCollapsed(true)}
+                 className="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-100 text-slate-400 hover:text-amber-500 hover:border-amber-500/30 hover:bg-amber-50 transition-all duration-300 shadow-sm"
+                 title="Collapse Sidebar"
+               >
+                 <PanelLeftClose size={16} />
                </button>
             </div>
          </div>
