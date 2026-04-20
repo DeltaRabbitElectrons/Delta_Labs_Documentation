@@ -13,6 +13,7 @@ import {
 import { useRouter } from 'next/navigation';
 import WorkspaceSwitcher from './WorkspaceSwitcher';
 import PublishButton from './PublishButton';
+import PresenceAvatars from './PresenceAvatars';
 
 interface AdminNavbarProps {
   pageTitle?: string;
@@ -116,6 +117,8 @@ export default function AdminNavbar({
           </a>
         )}
 
+        <div className="h-6 w-px bg-[var(--border)] mx-1" />
+        <PresenceAvatars />
         <div className="h-6 w-px bg-[var(--border)] mx-1" />
         <PublishButton />
         <div className="h-6 w-px bg-[var(--border)] mx-1" />
