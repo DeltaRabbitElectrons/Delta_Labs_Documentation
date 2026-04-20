@@ -79,13 +79,14 @@ export default function DocsSidebar({
   useEffect(() => {
     const savedWidth = localStorage.getItem('sidebarWidth');
     if (savedWidth) {
-      const width = parseInt(savedWidth);
-      setSidebarWidth(width);
-      document.documentElement.style.setProperty('--sidebar-width', `${width}px`);
-    } else {
-      document.documentElement.style.setProperty('--sidebar-width', '280px');
+      setSidebarWidth(parseInt(savedWidth));
     }
   }, []);
+
+  useEffect(() => {
+    const width = isCollapsed ? 0 : sidebarWidth;
+    document.documentElement.style.setProperty('--sidebar-width', `${width}px`);
+  }, [isCollapsed, sidebarWidth]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
