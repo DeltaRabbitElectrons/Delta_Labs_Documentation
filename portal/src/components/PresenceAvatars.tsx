@@ -238,7 +238,7 @@ export default function PresenceAvatars() {
             {/* Footer */}
             <div className="px-5 py-2.5 bg-slate-50/80 border-t border-[var(--border)]">
               <p className="text-[10px] text-slate-400 font-[700] uppercase tracking-[0.12em] text-center">
-                {admins.length} team member{admins.length !== 1 ? 's' : ''} total
+                {admins.length} team member{admins.length !== 1 ? 's' : ''} total • v2.1
               </p>
             </div>
           </div>
