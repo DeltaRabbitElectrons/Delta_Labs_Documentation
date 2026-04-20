@@ -63,24 +63,29 @@
 }
 
 .rich-editor-content pre {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 1rem;
-  margin: 1.5rem 0;
-  font-family: var(--font-mono);
+  background: #0f172a; /* slate-900 (Deep Midnight) */
+  color: #e2e8f0; /* slate-200 (Crisp Text) */
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin: 2rem 0;
+  font-family: 'JetBrains Mono', 'Fira Code', var(--font-mono);
   font-size: 13px;
+  line-height: 1.6;
   overflow-x: auto;
   position: relative;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
 
 .rich-editor-content code {
   font-family: var(--font-mono);
-  background: var(--bg-secondary);
-  padding: 0.2rem 0.4rem;
-  border-radius: 4px;
-  font-size: 0.9em;
-  color: var(--accent-primary);
+  background: #f1f5f9; /* slate-100 */
+  padding: 0.15rem 0.4rem;
+  border-radius: 6px;
+  font-size: 0.85em;
+  color: #c026d3; /* vibrant fuchsia */
+  font-weight: 600;
+  border: 1px solid #e2e8f0;
 }
 
 .rich-editor-content pre code {
@@ -88,6 +93,8 @@
   padding: 0;
   color: inherit;
   font-size: inherit;
+  font-weight: inherit;
+  border: none;
 }
 
 .rich-editor-content ul, .rich-editor-content ol {
@@ -267,12 +274,37 @@
   border-radius: 4px;
 }
 
-/* Syntax Highlighting */
-.hljs-comment { color: #9ca3af; font-style: italic; }
-.hljs-keyword { color: #2563eb; }
-.hljs-string { color: #16a34a; }
-.hljs-function { color: #2563eb; }
-.hljs-number { color: #d97706; }
+/* Syntax Highlighting — Professional Dark Theme */
+.hljs-comment { color: #64748b; font-style: italic; }
+.hljs-quote { color: #64748b; }
+
+.hljs-keyword { color: #818cf8; font-weight: 600; }
+.hljs-selector-tag { color: #818cf8; }
+.hljs-literal { color: #818cf8; }
+
+.hljs-string { color: #34d399; }
+.hljs-regexp { color: #34d399; }
+.hljs-addition { color: #34d399; }
+
+.hljs-number { color: #fbbf24; }
+.hljs-boolean { color: #fbbf24; }
+.hljs-symbol { color: #fbbf24; }
+
+.hljs-function { color: #fb7185; }
+.hljs-title { color: #fb7185; }
+.hljs-section { color: #fb7185; }
+
+.hljs-variable { color: #38bdf8; }
+.hljs-template-variable { color: #38bdf8; }
+.hljs-attribute { color: #38bdf8; }
+
+.hljs-type { color: #a78bfa; }
+.hljs-built_in { color: #a78bfa; }
+.hljs-class { color: #a78bfa; }
+
+.hljs-params { color: #94a3b8; }
+.hljs-attr { color: #38bdf8; }
+
 
 /* Editor Interactions */
 .rich-editor-wrapper {
