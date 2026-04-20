@@ -185,6 +185,8 @@ export default function RichEditor({
     };
 
     const dom = editor.options.element;
+    if (!dom) return;
+
     dom.addEventListener('mousedown', handleMouseDown);
     return () => dom.removeEventListener('mousedown', handleMouseDown);
   }, [editor]);
