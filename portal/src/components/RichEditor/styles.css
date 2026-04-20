@@ -176,6 +176,36 @@
   background: var(--accent-primary);
 }
 
+/* MS Word Style Global Table Resize Handle (Bottom-Right Corner) */
+.rich-editor-content table {
+  position: relative;
+}
+
+.rich-editor-content tr:last-child td:last-child {
+  position: relative;
+}
+
+.rich-editor-content tr:last-child td:last-child:before {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 12px;
+  height: 12px;
+  background: white;
+  border: 2px solid var(--accent-primary);
+  border-radius: 2px;
+  cursor: nwse-resize;
+  z-index: 30;
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: auto;
+}
+
+.rich-editor-content table:hover tr:last-child td:last-child:before {
+  opacity: 1;
+}
+
 .rich-editor-content .selectedCell:after {
   z-index: 2;
   position: absolute;

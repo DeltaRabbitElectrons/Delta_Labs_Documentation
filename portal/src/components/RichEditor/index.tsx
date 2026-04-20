@@ -139,6 +139,56 @@ export default function RichEditor({
     },
   });
 
+  // MS Word Style Table Resizing Logic
+  useEffect(() => {
+    if (!editor) return;
+
+    const handleMouseDown = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      // Check if clicking near the bottom-right corner handle of the last cell
+      const cell = target.closest('td, th');
+      if (!cell) return;
+      
+      const table = cell.closest('table');
+      if (!table) return;
+
+      const isLastCell = cell.parentElement?.nextElementSibling === null && cell.nextElementSibling === null;
+      if (!isLastCell) return;
+
+      const rect = cell.getBoundingClientRect();
+      const isCorner = (e.clientX > rect.right - 15) && (e.clientY > rect.bottom - 15);
+
+      if (isCorner) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const startX = e.clientX;
+        const startWidth = table.offsetWidth;
+
+        const onMouseMove = (me: MouseEvent) => {
+           const deltaX = me.clientX - startX;
+           const newWidth = Math.max(100, startWidth + deltaX);
+           table.style.width = `${newWidth}px`;
+           table.style.minWidth = `${newWidth}px`; // Force override
+        };
+
+        const onMouseUp = () => {
+           document.removeEventListener('mousemove', onMouseMove);
+           document.removeEventListener('mouseup', onMouseUp);
+           // After global resize, we might want to update tiptap attributes,
+           // but for simple visual preview, styling the element works well.
+        };
+
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+      }
+    };
+
+    const dom = editor.options.element;
+    dom.addEventListener('mousedown', handleMouseDown);
+    return () => dom.removeEventListener('mousedown', handleMouseDown);
+  }, [editor]);
+
   // Enable editing on click
   function handleClick() {
     if (!editor || isEditing) return;
