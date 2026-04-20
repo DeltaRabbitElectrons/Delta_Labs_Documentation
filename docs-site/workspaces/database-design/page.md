@@ -1,10 +1,8 @@
 ---
-title: Ws:Database Design:Page
-sidebar_label: Ws:Database Design:Page
+title: page
+sidebar_label: page
 id: page
 ---
-
-# jkl
 
 # page
 
