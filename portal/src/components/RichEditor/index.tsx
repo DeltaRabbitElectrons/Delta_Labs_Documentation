@@ -110,7 +110,6 @@ export default function RichEditor({
       Table.configure({ 
         resizable: true,
         lastColumnResizable: true,
-        allowTableResize: true,
       }),
       TableRow,
       TableHeader,
