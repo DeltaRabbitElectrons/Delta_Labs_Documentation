@@ -593,7 +593,7 @@ function SortableSidebarNode({
     transform: CSS.Translate.toString(transform),
     transition,
     opacity: isDragging ? 0.3 : 1,
-    paddingLeft: isRoot ? '8px' : `${level * 16 + 8}px`
+    paddingLeft: '4px' // Minimal base padding, hierarchy handled by container margins
   };
 
   const isActive = node.slug === currentSlug;
@@ -694,7 +694,7 @@ function SortableSidebarNode({
       {node.type === 'category' && node.isOpen && node.children && (
         <div className={`overflow-hidden transition-all duration-300 ${node.isOpen ? 'max-h-[5000px] opacity-100' : 'max-h-0 opacity-0'}`}>
           <SortableContext items={node.children.map(c => c.id)} strategy={verticalListSortingStrategy}>
-            <div className="flex flex-col gap-0.5 mt-0.5 border-l border-slate-100 ml-4 pl-1">
+            <div className="flex flex-col gap-0.5 mt-0.5 border-l border-slate-100 ml-3 pl-1">
                {node.children.map(child => (
                  <SortableSidebarNode 
                    key={child.id} 
