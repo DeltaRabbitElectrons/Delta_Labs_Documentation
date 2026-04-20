@@ -2,7 +2,7 @@
 
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { getColorFromName, formatRelativeTime } from '@/lib/utils';
-import { api } from './api';
+import { api } from '@/lib/api';
 import { draftStore } from '@/lib/draftStore';
 import { Pencil, Clock, User } from 'lucide-react';
 
