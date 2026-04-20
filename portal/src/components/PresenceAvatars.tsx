@@ -63,9 +63,23 @@ export default function PresenceAvatars() {
       }
     };
 
+    const sendHeartbeat = async () => {
+      try {
+        await api.post('/admin/heartbeat', {});
+      } catch {
+        // Heartbeat failed
+      }
+    };
+
     fetchAdmins();
-    // Refresh presence every 60 seconds
-    const interval = setInterval(fetchAdmins, 60000);
+    sendHeartbeat(); // Initial heartbeat
+
+    // Refresh presence every 30 seconds
+    const interval = setInterval(() => {
+      fetchAdmins();
+      sendHeartbeat();
+    }, 30000);
+    
     return () => clearInterval(interval);
   }, []);
 
@@ -81,11 +95,24 @@ export default function PresenceAvatars() {
 
   if (admins.length === 0) return null;
 
-  // Current user first, then others
+  // Real-time activity threshold: 2 minutes
+  const isActiveNow = (admin: AdminPresence) => {
+    if (!admin.last_active) return false;
+    const diff = Date.now() - new Date(admin.last_active).getTime();
+    return diff < 120000; // 2 minutes
+  };
+
+  // Sort: Me first, then active users, then alphabetical
   const sorted = [...admins].sort((a, b) => {
     if (a.email === currentEmail) return -1;
     if (b.email === currentEmail) return 1;
-    return 0;
+    
+    const aActive = isActiveNow(a);
+    const bActive = isActiveNow(b);
+    if (aActive && !bActive) return -1;
+    if (!aActive && bActive) return 1;
+    
+    return a.name.localeCompare(b.name);
   });
 
   const MAX_VISIBLE = 4;
@@ -103,7 +130,7 @@ export default function PresenceAvatars() {
         {visible.map((admin, i) => {
           const color = getColorForIndex(i);
           const isMe = admin.email === currentEmail;
-          const isActive = admin.status === 'active';
+          const isActive = isMe || isActiveNow(admin);
           const initials = admin.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
 
           return (
@@ -143,7 +170,7 @@ export default function PresenceAvatars() {
                 <div className="flex items-center gap-1.5">
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   <span className="text-[10px] font-bold text-emerald-500">
-                    {admins.filter(a => a.status === 'active').length} online
+                    {admins.filter(a => a.email === currentEmail || isActiveNow(a)).length} online
                   </span>
                 </div>
               </div>
@@ -154,8 +181,8 @@ export default function PresenceAvatars() {
               {sorted.map((admin, i) => {
                 const color = getColorForIndex(i);
                 const isMe = admin.email === currentEmail;
-                const isActive = admin.status === 'active';
                 const initials = admin.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+                const isActive = isMe || isActiveNow(admin);
                 const activity = isActive ? 'Active' : timeAgo(admin.last_active || admin.created_at);
 
                 return (
