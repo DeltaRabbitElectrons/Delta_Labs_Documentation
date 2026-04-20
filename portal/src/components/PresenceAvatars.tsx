@@ -10,6 +10,7 @@ interface AdminPresence {
   role: string;
   status: string;
   last_active?: string;
+  created_at?: string;
 }
 
 function timeAgo(dateStr?: string): string {
