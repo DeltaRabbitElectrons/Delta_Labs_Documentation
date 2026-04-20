@@ -61,8 +61,8 @@ export default function WorkspaceSidebar({ workspaceName }: WorkspaceSidebarProp
       style={{ width: `${sidebarWidth}px` }}
     >
       {/* Header — matches DocsSidebar header */}
-      <div className="px-5 pt-8 pb-6">
-        <div className="flex items-center justify-between mb-8">
+      <div className="px-4 pt-6 pb-4">
+        <div className="flex items-center justify-between mb-5">
           <div className="flex flex-col">
             <h3 className="text-[10px] font-black uppercase tracking-[0.25em] text-[var(--text-muted)] flex items-center gap-2 mb-1">
               Explorer <Zap size={10} className="text-[var(--accent-primary)] animate-pulse" />

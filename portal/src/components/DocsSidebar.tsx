@@ -415,8 +415,8 @@ export default function DocsSidebar({
     >
       
       {/* Brand & Global Controls */}
-      <div className="px-5 pt-8 pb-6">
-         <div className="flex items-center justify-between mb-8">
+      <div className="px-4 pt-6 pb-4">
+         <div className="flex items-center justify-between mb-5">
             <div className="flex flex-col">
                <h3 className="text-[10px] font-black uppercase tracking-[0.25em] text-[var(--text-muted)] flex items-center gap-2 mb-1">
                   Explorer <Zap size={10} className="text-[var(--accent-primary)] animate-pulse" />
@@ -444,16 +444,16 @@ export default function DocsSidebar({
          {/* Premium Search Bar */}
          <div className="relative group">
             <div className={`
-              absolute inset-0 bg-slate-100 rounded-xl transition-all duration-300
-              group-focus-within:bg-white group-focus-within:ring-4 group-focus-within:ring-[var(--focus-ring)] group-focus-within:border-[var(--accent-primary)]/20 border border-transparent
+              absolute inset-0 bg-slate-50 rounded-lg transition-all duration-300
+              group-focus-within:bg-white group-focus-within:ring-2 group-focus-within:ring-[var(--focus-ring)] group-focus-within:border-[var(--accent-primary)]/20 border border-transparent
             `} />
-            <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[var(--accent-primary)] transition-all z-10" />
+            <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[var(--accent-primary)] transition-all z-10" />
             <input 
               type="text" 
               placeholder="Search assets..." 
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="relative w-full bg-transparent pl-10 pr-4 py-2.5 text-[13px] font-semibold text-slate-700 placeholder-slate-400 outline-none z-10"
+              className="relative w-full bg-transparent pl-9 pr-4 py-1.5 text-[12px] font-medium text-slate-700 placeholder-slate-400 outline-none z-10"
             />
             {searchQuery && (
                <button 
@@ -603,13 +603,13 @@ function SortableSidebarNode({
     <div ref={setNodeRef} style={style} className="group/item select-none animate-node-enter">
       <div 
         className={`
-          flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-300 relative
-          ${isActive ? 'bg-[var(--accent-light)] text-[var(--accent-primary)] shadow-sm' : 'hover:bg-slate-50 text-slate-600 hover:text-slate-900'}
+          flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg cursor-pointer transition-all duration-200 relative
+          ${isActive ? 'bg-[var(--accent-light)] text-[var(--accent-primary)]' : 'hover:bg-slate-50 text-slate-500 hover:text-slate-900'}
         `}
         onClick={() => node.type === 'page' ? onNavigate(node.slug!) : onToggleNode(node.id)}
       >
-        {/* Active Indicator */}
-        {isActive && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-[var(--accent-primary)] rounded-full" />}
+        {/* Active Indicator - subtle dot or just background */}
+        {isActive && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-4 bg-[var(--accent-primary)] rounded-full" />}
 
         <div {...listeners} {...attributes} className="opacity-0 group-hover/item:opacity-20 cursor-grab active:cursor-grabbing p-1 -ml-1 hover:opacity-100 transition-opacity shrink-0">
           <GripVertical size={12} />
@@ -645,7 +645,7 @@ function SortableSidebarNode({
                </div>
             </div>
           ) : (
-            <span className={`text-[13px] font-semibold truncate transition-all ${isActive ? 'font-black scale-[1.02]' : 'group-hover/item:translate-x-0.5'}`}>
+            <span className={`text-[12.5px] font-medium truncate transition-all ${isActive ? 'text-[var(--accent-primary)]' : 'group-hover/item:translate-x-0.5'}`}>
                {node.label}
             </span>
           )}
