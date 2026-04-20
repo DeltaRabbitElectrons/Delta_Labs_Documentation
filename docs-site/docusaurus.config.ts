@@ -40,13 +40,10 @@ const config: Config = {
   url: 'https://delta-labs-docs-cyan.vercel.app',
   baseUrl: '/',
   onBrokenLinks: 'warn',
+  onBrokenMarkdownLinks: 'warn',
   markdown: {
     format: 'md',
     mermaid: true,
-    preprocessor: ({filePath, fileContent}) => {
-      return fileContent;
-    },
-    onBrokenMarkdownLinks: 'warn',
     mdx1Compat: {
       comments: true,
       admonitions: true,
