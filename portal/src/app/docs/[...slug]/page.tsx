@@ -81,70 +81,75 @@ export default function EditableDocs() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
 
-  if (!page) {
-    return <LoadingScreen message="Loading Document Stream" />;
-  }
+  // If we don't have page data yet, we can't show the RichEditor, 
+  // but we should STILL show the Sidebar and Navbar to avoid a full-screen reload flicker.
+  const displayTitle = page?.title || cleanSlug.split('/').pop()?.replace(/-/g, ' ') || '...';
 
   return (
     <div className="min-h-screen bg-white text-[var(--text-primary)] selection:bg-[#eff6ff]">
       <AdminNavbar
-        pageTitle={page.title}
+        pageTitle={displayTitle}
         onShowHistory={() => setShowHistory(true)}
-        viewLiveUrl={`https://delta-labs-docs-cyan.vercel.app/${page.slug}`}
+        viewLiveUrl={page ? `https://delta-labs-docs-cyan.vercel.app/${page.slug}` : undefined}
       />
 
       <DocsSidebar
-        currentSlug={page.slug}
-        onNavigate={s => router.push(`/docs/${s}`)}
+        currentSlug={page?.slug || cleanSlug}
+        onNavigate={s => {
+          // If we are navigating to the same workspace, we can just trigger a new load
+          // without a full route push if we really wanted to go deep, 
+          // but Next.js router.push is fast enough if we don't wipe the layout.
+          router.push(`/docs/${s}`);
+        }}
       />
 
       <main className="pl-[var(--sidebar-width,280px)] pt-[52px] min-h-screen flex flex-col items-center">
         {loading && <LoadingScreen message="Synchronizing Changes" fullScreen={true} />}
 
-        <div className={`w-full max-w-[800px] px-12 py-20 transition-opacity duration-300 ${pageLoading ? 'opacity-30 pointer-events-none blur-[2px]' : 'opacity-100'}`}>
-          {/* Breadcrumb Context */}
-          <div className="flex items-center gap-2 mb-10 text-[var(--text-muted)] text-[12px] font-medium uppercase tracking-[0.05em]">
-            <span>Documentation</span>
-            <ChevronRight size={12} />
-            <span className="text-[var(--text-secondary)]">{page.category}</span>
-          </div>
-
-          {isNewPage && (
-            <div className="mb-6 px-4 py-3 bg-[#f6faf8] border border-[#c6eed9] rounded-lg text-[13px] text-[#2e8555]">
-              ✨ New page — click the content area below to start writing.
+        {!page ? (
+           <div className="flex-1 flex items-center justify-center">
+             <LoadingScreen message="Unlocking Document stream" />
+           </div>
+        ) : (
+          <div className={`w-full max-w-[800px] px-12 py-20 transition-all duration-300 ${pageLoading ? 'opacity-30 pointer-events-none blur-[2px] scale-[0.995]' : 'opacity-100 scale-100'}`}>
+            {/* Breadcrumb Context */}
+            <div className="flex items-center gap-2 mb-10 text-[var(--text-muted)] text-[12px] font-medium uppercase tracking-[0.05em]">
+              <span>Documentation</span>
+              <ChevronRight size={12} />
+              <span className="text-[var(--text-secondary)]">{page.category}</span>
             </div>
-          )}
 
-          {/* Title Area */}
-          <div className="mb-12">
-            <EditableBlock
-              blockId="title"
-              field="title"
-              initialValue={page.title}
-              slug={page.slug}
-              isMarkdown={false}
-              className="text-[30px] font-bold text-[var(--text-primary)] tracking-tight leading-tight transition-all duration-150"
-              changeInfo={changeMap['title']}
-            />
-            {page.updatedAt && (
-               <div className="mt-4 flex items-center gap-2 text-[var(--text-muted)] text-[12px]">
-                  <span>Last edited {new Date(page.updatedAt).toLocaleDateString()}</span>
-                  <div className="w-1 h-1 rounded-full bg-[var(--border)]" />
-                  <span>By {page.lastEditedBy || 'System'}</span>
-               </div>
-            )}
+            {/* Title Area */}
+            <div className="mb-12">
+              <EditableBlock
+                blockId="title"
+                field="title"
+                initialValue={page.title}
+                slug={page.slug}
+                isMarkdown={false}
+                className="text-[30px] font-bold text-[var(--text-primary)] tracking-tight leading-tight transition-all duration-150"
+                changeInfo={changeMap['title']}
+              />
+              {page.updatedAt && (
+                <div className="mt-4 flex items-center gap-2 text-[var(--text-muted)] text-[12px]">
+                    <span>Last edited {new Date(page.updatedAt).toLocaleDateString()}</span>
+                    <div className="w-1 h-1 rounded-full bg-[var(--border)]" />
+                    <span>By {page.lastEditedBy || 'System'}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Main Content Area */}
+            <section className="prose prose-slate max-w-none">
+              <RichEditor
+                blockId="content"
+                content={page.content}
+                slug={page.slug}
+                changeInfo={changeMap['content']}
+              />
+            </section>
           </div>
-
-          {/* Main Content Area */}
-          <section className="prose prose-slate max-w-none">
-            <RichEditor
-              blockId="content"
-              content={page.content}
-              slug={page.slug}
-              changeInfo={changeMap['content']}
-            />
-          </section>
-        </div>
+        )}
       </main>
 
       <HistoryModal
