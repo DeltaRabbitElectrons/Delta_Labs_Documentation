@@ -123,6 +123,71 @@
               "label": "feature_catalog"
             }
           ]
+        },
+        {
+          "type": "category",
+          "label": "Index Catalog",
+          "collapsible": true,
+          "collapsed": false,
+          "items": [
+            {
+              "type": "doc",
+              "id": "page",
+              "label": "page"
+            }
+          ]
+        },
+        {
+          "type": "category",
+          "label": "Redis Data Structures",
+          "collapsible": true,
+          "collapsed": false,
+          "items": [
+            {
+              "type": "doc",
+              "id": "page",
+              "label": "page"
+            }
+          ]
+        },
+        {
+          "type": "category",
+          "label": "RBAC Role Catalog",
+          "collapsible": true,
+          "collapsed": false,
+          "items": [
+            {
+              "type": "doc",
+              "id": "page",
+              "label": "page"
+            }
+          ]
+        },
+        {
+          "type": "category",
+          "label": "Data Lifecycle & Retention",
+          "collapsible": true,
+          "collapsed": false,
+          "items": [
+            {
+              "type": "doc",
+              "id": "page",
+              "label": "page"
+            }
+          ]
+        },
+        {
+          "type": "category",
+          "label": "Operational Notes",
+          "collapsible": true,
+          "collapsed": false,
+          "items": [
+            {
+              "type": "doc",
+              "id": "page",
+              "label": "page"
+            }
+          ]
         }
       ]
     }
