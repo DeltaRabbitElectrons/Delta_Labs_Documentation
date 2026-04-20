@@ -152,15 +152,17 @@ export default function EditableDocs() {
         )}
       </main>
 
-      <HistoryModal
-        slug={page.slug}
-        isOpen={showHistory}
-        onClose={() => setShowHistory(false)}
-        onRevertSuccess={() => {
-          setLoading(true);
-          loadPage(page.slug).finally(() => setLoading(false));
-        }}
-      />
+      {page && (
+        <HistoryModal
+          slug={page.slug}
+          isOpen={showHistory}
+          onClose={() => setShowHistory(false)}
+          onRevertSuccess={() => {
+            setLoading(true);
+            loadPage(page.slug).finally(() => setLoading(false));
+          }}
+        />
+      )}
     </div>
   );
 }
