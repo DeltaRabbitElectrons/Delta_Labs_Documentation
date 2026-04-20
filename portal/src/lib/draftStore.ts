@@ -1,12 +1,6 @@
 import { api } from './api';
 import { pendingChanges } from './pendingChanges';
 
-export interface DraftPage {
-  slug: string;
-  content: string;
-  lastEdited: string;
-}
-
 export interface SidebarNode {
   id: string;
   type: 'page' | 'category';
@@ -21,47 +15,76 @@ export interface DraftSidebar {
   lastEdited: string;
 }
 
+export interface DraftPageFields {
+  slug: string;
+  fields: Record<string, string>; // fieldKey (e.g. 'content', 'title') -> draftValue
+  lastEdited: string;
+}
+
 const STORAGE_KEYS = {
-  PAGES: 'delta_draft_pages_',
+  PAGES_V2: 'delta_draft_pages_v2_', // Use V2 to avoid breaking old content-only drafts
   SIDEBAR: 'delta_draft_sidebar_',
 };
 
 class DraftStore {
-  private getPageKey(workspace: string) { return `${STORAGE_KEYS.PAGES}${workspace}`; }
+  private getPageKey(workspace: string) { return `${STORAGE_KEYS.PAGES_V2}${workspace}`; }
   private getSidebarKey(workspace: string) { return `${STORAGE_KEYS.SIDEBAR}${workspace}`; }
 
-  // --- Page Drafts ---
+  // --- Page Field Drafts ---
 
-  getAllPages(workspace: string = 'docs'): Record<string, DraftPage> {
+  getAllPages(workspace: string = 'docs'): Record<string, DraftPageFields> {
     if (typeof window === 'undefined') return {};
     const stored = localStorage.getItem(this.getPageKey(workspace));
     return stored ? JSON.parse(stored) : {};
   }
 
-  getPage(slug: string, workspace: string = 'docs'): string | null {
+  getField(slug: string, field: string, workspace: string = 'docs'): string | null {
     const pages = this.getAllPages(workspace);
-    return pages[slug]?.content || null;
+    return pages[slug]?.fields[field] || null;
   }
 
-  savePage(slug: string, content: string, originalContent: string, workspace: string = 'docs') {
+  /**
+   * For backward compatibility with RichEditor content saving
+   */
+  getPage(slug: string, workspace: string = 'docs'): string | null {
+    return this.getField(slug, 'content', workspace);
+  }
+
+  saveField(slug: string, field: string, newValue: string, originalValue: string, workspace: string = 'docs') {
     const pages = this.getAllPages(workspace);
     
-    if (content === originalContent) {
+    if (newValue === originalValue) {
       if (pages[slug]) {
-        delete pages[slug];
+        delete pages[slug].fields[field];
+        if (Object.keys(pages[slug].fields).length === 0) {
+          delete pages[slug];
+        }
         localStorage.setItem(this.getPageKey(workspace), JSON.stringify(pages));
         this.syncWithPendingChanges(workspace);
       }
       return;
     }
 
-    pages[slug] = {
-      slug,
-      content,
-      lastEdited: new Date().toISOString(),
-    };
+    if (!pages[slug]) {
+      pages[slug] = {
+        slug,
+        fields: {},
+        lastEdited: new Date().toISOString(),
+      };
+    }
+
+    pages[slug].fields[field] = newValue;
+    pages[slug].lastEdited = new Date().toISOString();
+    
     localStorage.setItem(this.getPageKey(workspace), JSON.stringify(pages));
     this.syncWithPendingChanges(workspace);
+  }
+
+  /**
+   * For backward compatibility with RichEditor content saving
+   */
+  savePage(slug: string, content: string, originalContent: string, workspace: string = 'docs') {
+    this.saveField(slug, 'content', content, originalContent, workspace);
   }
 
   removePage(slug: string, workspace: string = 'docs') {
@@ -101,11 +124,15 @@ class DraftStore {
     const pages = this.getAllPages(workspace);
     const sidebar = this.getSidebar(workspace);
     
-    // We append workspace to the pending change ID to avoid cross-workspace collisions
     pendingChanges.removeByNamespace(workspace);
     
     Object.keys(pages).forEach(slug => {
-      pendingChanges.registerChange('page', `${workspace}:${slug}`, async () => {}, workspace);
+      Object.keys(pages[slug].fields).forEach(field => {
+        // Register each field as a pending change
+        // We use a dummy saveFn here; the actual publish logic uses api.post directly 
+        // to walk through everything in the draftStore.
+        pendingChanges.registerChange('page', `${workspace}:${slug}:${field}`, async () => {}, workspace);
+      });
     });
 
     if (sidebar) {
@@ -117,15 +144,17 @@ class DraftStore {
     const pages = this.getAllPages(workspace);
     const sidebar = this.getSidebar(workspace);
 
-    // 1. Save all pages
-    for (const draft of Object.values(pages)) {
-      await api.post(`/content/save`, {
-        slug: draft.slug,
-        field: 'content',
-        newValue: draft.content,
-        block_id: 'content',
-        workspace: workspace
-      });
+    // 1. Save all pages and their specific fields
+    for (const pageDraft of Object.values(pages)) {
+      for (const [field, value] of Object.entries(pageDraft.fields)) {
+         await api.post(`/content/save`, {
+            slug: pageDraft.slug,
+            field: field,
+            newValue: value,
+            block_id: field === 'content' ? 'content' : field, // Convention
+            workspace: workspace
+          });
+      }
     }
 
     // 2. Save sidebar if changed

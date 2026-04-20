@@ -2,8 +2,8 @@
 
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { getColorFromName, formatRelativeTime } from '@/lib/utils';
-import { pendingChanges } from '@/lib/pendingChanges';
-import { api } from '@/lib/api';
+import { api } from './api';
+import { draftStore } from '@/lib/draftStore';
 import { Pencil, Clock, User } from 'lucide-react';
 
 export interface ChangeLogEntry {
@@ -78,10 +78,13 @@ export default function EditableBlock({
 
   useEffect(() => {
     originalRef.current = initialValue;
+    const draft = draftStore.getField(slug, field, workspace);
+    const displayValue = draft !== null ? draft : initialValue;
+    
     if (ref.current && !editing) {
-      ref.current.innerText = initialValue;
+      ref.current.innerText = displayValue;
     }
-  }, [initialValue, editing]);
+  }, [initialValue, editing, slug, field, workspace]);
 
   const handleClick = () => {
     if (editing) return;
@@ -100,15 +103,9 @@ export default function EditableBlock({
   };
 
   const registerWithStore = useCallback((newValue: string) => {
-    if (newValue === originalRef.current) {
-      pendingChanges.removeChange("page", `${slug}:${field}`, workspace);
-      return;
-    }
-    pendingChanges.registerChange("page", `${slug}:${field}`, async () => {
-      await api.post("/content/save", { slug, field, newValue, block_id: blockId, workspace });
-      originalRef.current = newValue;
-    }, workspace);
-  }, [slug, field, blockId, workspace]);
+    // Persist to draft store so it survives refreshes/navigation
+    draftStore.saveField(slug, field, newValue, originalRef.current, workspace);
+  }, [slug, field, workspace]);
 
   const handleBlur = () => {
     setEditing(false);

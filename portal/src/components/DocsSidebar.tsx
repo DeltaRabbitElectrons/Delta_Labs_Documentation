@@ -191,6 +191,7 @@ export default function DocsSidebar({
 
     const updatedTree = addToTree(tree);
     setTree(updatedTree);
+    saveSidebar(updatedTree); // Persist immediately
     // Mark as pending — backend creation deferred until name is confirmed
     pendingNodeIds.current.add(newNode.id);
     setEditingId(newNode.id);
@@ -349,7 +350,9 @@ export default function DocsSidebar({
         return n;
       });
     };
-    setTree(updateToggle(tree));
+    const updatedTree = updateToggle(tree);
+    setTree(updatedTree);
+    saveSidebar(updatedTree);
   };
 
   if (loading) return (
