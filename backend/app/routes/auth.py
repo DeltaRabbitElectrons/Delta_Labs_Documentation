@@ -65,6 +65,53 @@ async def google_login(body: GoogleLoginIn):
         logger.error(f"Error during Google Login: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal server error during Google login")
 
+@router.post('/google-signup')
+async def google_signup(body: GoogleLoginIn):
+    try:
+        # 1. Verify the Google ID Token
+        id_info = id_token.verify_oauth2_token(
+            body.token, 
+            requests.Request(), 
+            settings.GOOGLE_CLIENT_ID
+        )
+
+        email = id_info['email']
+        name = id_info.get('name', 'Admin')
+        db = get_db()
+        
+        # Check if user already exists
+        existing_user = await db.users.find_one({'email': email})
+        if existing_user:
+            return {
+                'message': 'Account already exists. Please log in.',
+                'already_exists': True
+            }
+
+        # 2. Create pending user
+        await db.users.insert_one({
+            'name': name,
+            'email': email,
+            'role': 'admin',
+            'status': 'pending',
+            'createdAt': datetime.utcnow(),
+            'method': 'google'
+        })
+        
+        # 3. Notify super admins
+        try:
+            await email_service.send_new_signup_alert(name, email)
+        except Exception as e:
+            logger.error(f"Failed to send signup alert for Google user: {str(e)}")
+
+        return {'message': 'Request submitted successfully'}
+
+    except ValueError as e:
+        logger.error(f"Google Token Verification Failed: {str(e)}")
+        raise HTTPException(status_code=400, detail="Invalid Google token")
+    except Exception as e:
+        logger.error(f"Error during Google Signup: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error during Google signup")
+
 # ─── TEMPORARY DEBUG ROUTE — remove after fixing email ────────────────────────
 @router.get('/debug/test-email')
 async def test_email():

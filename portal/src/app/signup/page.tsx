@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Loader2, AlertCircle, CheckCircle2, ArrowLeft } from 'lucide-react';
 import { api } from '@/lib/api';
+import { GoogleLogin } from '@react-oauth/google';
 
 export default function Signup() {
   const [success, setSuccess] = useState(false);
@@ -84,6 +85,23 @@ export default function Signup() {
         } catch { /* use original msg */ }
       }
       setError(msg);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleSuccess = async (credentialResponse: any) => {
+    setLoading(true);
+    setError('');
+    try {
+      const res: any = await api.post('/auth/google-signup', { token: credentialResponse.credential });
+      if (res.already_exists) {
+        setError(res.message);
+      } else {
+        setSuccess(true);
+      }
+    } catch (err: any) {
+      setError(err.message || 'Google signup failed');
     } finally {
       setLoading(false);
     }
@@ -239,6 +257,26 @@ export default function Signup() {
               'Submit Request'
             )}
           </button>
+
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-[#f1f5f9]"></div>
+            </div>
+            <div className="relative flex justify-center text-[12px] uppercase">
+              <span className="bg-white px-3 text-[#9ca3af] font-medium">or extend request via</span>
+            </div>
+          </div>
+
+          <div className="flex justify-center w-full">
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={() => setError('Google Signup Failed')}
+              theme="outline"
+              shape="rectangular"
+              locale="en"
+              text="signup_with"
+            />
+          </div>
 
           <div className="pt-6 border-t border-[#f1f5f9] text-center">
             <p className="text-[13px] text-[#64748b]">
