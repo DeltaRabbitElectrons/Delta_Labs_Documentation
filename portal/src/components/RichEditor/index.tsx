@@ -107,7 +107,11 @@ export default function RichEditor({
       Highlight.configure({ multicolor: true }),
       UnderlineExt, // Keep these but we'll see if warning persists
       TextAlign.configure({ types: ["heading", "paragraph"] }),
-      Table.configure({ resizable: true }),
+      Table.configure({ 
+        resizable: true,
+        lastColumnResizable: true,
+        allowTableResize: true,
+      }),
       TableRow,
       TableHeader,
       TableCell,
