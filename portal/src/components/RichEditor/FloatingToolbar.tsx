@@ -9,7 +9,7 @@ import {
   Code, Code2, AlignLeft, AlignCenter, AlignRight,
   Table as TableIcon, Image as ImageIcon, Link as LinkIcon,
   Undo2, Redo2, GripHorizontal, Video, Unlink, Upload,
-  ExternalLink, BookOpen, Search
+  ExternalLink, BookOpen, Search, Trash2
 } from 'lucide-react';
 import { api } from '@/lib/api';
 
