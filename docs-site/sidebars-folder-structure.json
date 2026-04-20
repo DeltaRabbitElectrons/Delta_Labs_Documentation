@@ -2,14 +2,138 @@
   "sidebar_folder-structure": [
     {
       "type": "category",
-      "label": "group",
+      "label": "Deltalabs_Frontend",
       "collapsible": true,
       "collapsed": false,
       "items": [
         {
-          "type": "doc",
-          "id": "page",
-          "label": "page"
+          "type": "category",
+          "label": "src",
+          "collapsible": true,
+          "collapsed": false,
+          "items": [
+            {
+              "type": "category",
+              "label": "app",
+              "collapsible": true,
+              "collapsed": false,
+              "items": [
+                {
+                  "type": "doc",
+                  "id": "layouttsx",
+                  "label": "layout.tsx"
+                }
+              ]
+            },
+            {
+              "type": "category",
+              "label": "modules",
+              "collapsible": true,
+              "collapsed": false,
+              "items": [
+                {
+                  "type": "category",
+                  "label": "Auth",
+                  "collapsible": true,
+                  "collapsed": false,
+                  "items": [
+                    {
+                      "type": "category",
+                      "label": "api",
+                      "collapsible": true,
+                      "collapsed": false,
+                      "items": [
+                        {
+                          "type": "doc",
+                          "id": "authapits",
+                          "label": "authApi.ts"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "authvalidationts",
+                          "label": "authValidation.ts"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "indexts",
+                          "label": "index.ts"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "category",
+                      "label": "hooks",
+                      "collapsible": true,
+                      "collapsed": false,
+                      "items": [
+                        {
+                          "type": "doc",
+                          "id": "authmutationkeysts",
+                          "label": "authMutationKeys.ts"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "indexts",
+                          "label": "index.ts"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "useauthmutationts",
+                          "label": "useAuthMutation.ts"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "category",
+                      "label": "types",
+                      "collapsible": true,
+                      "collapsed": false,
+                      "items": [
+                        {
+                          "type": "doc",
+                          "id": "authts",
+                          "label": "auth.ts"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "indexts",
+                          "label": "index.ts"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "category",
+                      "label": "views",
+                      "collapsible": true,
+                      "collapsed": false,
+                      "items": [
+                        {
+                          "type": "doc",
+                          "id": "indexts",
+                          "label": "index.ts"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "loginpageview",
+                          "label": "LoginPageView"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "recoverypageviewtsx",
+                          "label": "RecoveryPageView.tsx"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "signuppageviewtsx",
+                          "label": "SignupPageView.tsx"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }
       ]
     }

@@ -1,6 +1,7 @@
 ---
 title: Introduction
 sidebar_label: Introduction
+id: getting-started/introduction
 ---
 
 # Welcome to Delta Labs Documentation
@@ -13,13 +14,13 @@ This documentation covers everything you need to know about developing for Delta
 
 -   **Explanation**: Why the system exists; project analysis and overview
     
--   \*\*Architecture\*\*: System structure, full system architecture, data flow
+-   **Architecture**: System structure, full system architecture, data flow
     
--   \*\*Design System\*\*: UI/UX standards, design tokens, component library, API standards
+-   **Design System**: UI/UX standards, design tokens, component library, API standards
     
--   \*\*Development Standards\*\*: Code quality and best practices
+-   **Development Standards**: Code quality and best practices
     
--   \*\*How-To Guides\*\*: Step-by-step tasks
+-   **How-To Guides**: Step-by-step tasks
     
 -   \*\*Reference\*\*: API reference, config, environment variables, error codes
     
