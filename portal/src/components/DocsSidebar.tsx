@@ -336,6 +336,22 @@ export default function DocsSidebar({
 
   const filteredTree = getFilteredTree(tree, searchQuery);
 
+  /**
+   * Recursively toggles the `isOpen` flag of any node in the tree by its ID.
+   * This single handler is passed to all SortableSidebarNode instances so that
+   * folders at ANY nesting depth can be collapsed/expanded.
+   */
+  const handleToggleNode = (toggleId: string) => {
+    const updateToggle = (nodes: SidebarNode[]): SidebarNode[] => {
+      return nodes.map(n => {
+        if (n.id === toggleId) return { ...n, isOpen: !n.isOpen };
+        if (n.children) return { ...n, children: updateToggle(n.children) };
+        return n;
+      });
+    };
+    setTree(updateToggle(tree));
+  };
+
   if (loading) return (
     <div 
       className="fixed left-0 top-[52px] bottom-0 bg-[var(--sidebar-bg)] border-r border-[var(--border)] flex flex-col items-center justify-center p-8 z-[50]"
@@ -464,16 +480,7 @@ export default function DocsSidebar({
                    node={node} 
                    currentSlug={currentSlug}
                    onNavigate={onNavigate}
-                   onToggle={() => {
-                     const updateToggle = (nodes: SidebarNode[]): SidebarNode[] => {
-                       return nodes.map(n => {
-                         if (n.id === node.id) return { ...n, isOpen: !n.isOpen };
-                         if (n.children) return { ...n, children: updateToggle(n.children) };
-                         return n;
-                       });
-                     };
-                     setTree(updateToggle(tree));
-                   }}
+                   onToggleNode={handleToggleNode}
                    onAdd={(id, type) => handleAddNode(id, type)}
                     onDelete={(id, slug) => {
                       const found = (function findNode(nodes: SidebarNode[]): SidebarNode | null {
@@ -544,7 +551,7 @@ interface SortableSidebarNodeProps {
   node: SidebarNode;
   currentSlug: string;
   onNavigate: (slug: string) => void;
-  onToggle: () => void;
+  onToggleNode: (id: string) => void;
   onAdd: (id: string, type: 'page' | 'category') => void;
   onDelete: (id: string, slug?: string) => void;
   onStartEdit: (id: string, label: string) => void;
@@ -561,7 +568,7 @@ function SortableSidebarNode({
   node, 
   currentSlug, 
   onNavigate, 
-  onToggle, 
+  onToggleNode, 
   onAdd, 
   onDelete,
   onStartEdit,
@@ -599,7 +606,7 @@ function SortableSidebarNode({
           flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-300 relative
           ${isActive ? 'bg-[var(--accent-light)] text-[var(--accent-primary)] shadow-sm' : 'hover:bg-slate-50 text-slate-600 hover:text-slate-900'}
         `}
-        onClick={() => node.type === 'page' ? onNavigate(node.slug!) : onToggle()}
+        onClick={() => node.type === 'page' ? onNavigate(node.slug!) : onToggleNode(node.id)}
       >
         {/* Active Indicator */}
         {isActive && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-[var(--accent-primary)] rounded-full" />}
@@ -694,7 +701,7 @@ function SortableSidebarNode({
                    node={child} 
                    currentSlug={currentSlug}
                    onNavigate={onNavigate}
-                   onToggle={() => {}} // Controlled by recursive update in parent
+                   onToggleNode={onToggleNode}
                    onAdd={onAdd}
                    onDelete={onDelete}
                    onStartEdit={onStartEdit}
