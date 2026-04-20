@@ -94,13 +94,11 @@ export default function WorkspacePage() {
     );
   }
 
-  if (loading || !workspace) {
-    return <LoadingScreen message="Loading Workspace" />;
-  }
-
+  // Render the layout and sidebar IMMEDIATELY, even if the workspace object isn't fully fetched yet.
+  // This prevents the "Hard Reset" feel when switching workspaces.
   return (
     <WorkspaceLayout
-      pageTitle={workspace.name}
+      pageTitle={workspace?.name || slug.replace(/-/g, ' ')}
       sidebar={
         <DocsSidebar 
           currentSlug="" 
@@ -109,27 +107,35 @@ export default function WorkspacePage() {
         />
       }
     >
-      <div className="w-full max-w-[800px] px-12 py-20 animate-fade-in">
-        <div className="flex items-center gap-2 mb-10 text-[var(--text-muted)] text-[12px] font-medium uppercase tracking-[0.05em]">
-          <span>Workspaces</span>
-          <ChevronRight size={12} />
-          <span className="text-[var(--text-secondary)]">{workspace.name}</span>
-        </div>
+      <main className="flex-1 flex flex-col items-center">
+        {(loading || !workspace) ? (
+           <div className="flex-1 flex items-center justify-center animate-pulse">
+             <LoadingScreen message="Initializing Workspace" />
+           </div>
+        ) : (
+          <div className="w-full max-w-[800px] px-12 py-20 animate-fade-in transition-all">
+            <div className="flex items-center gap-2 mb-10 text-[var(--text-muted)] text-[12px] font-medium uppercase tracking-[0.05em]">
+              <span>Workspaces</span>
+              <ChevronRight size={12} />
+              <span className="text-[var(--text-secondary)]">{workspace.name}</span>
+            </div>
 
-        <div className="flex flex-col items-center justify-center py-24 animate-fade-in">
-          <div className="w-24 h-24 rounded-3xl bg-[var(--bg-secondary)] border border-[var(--border)] flex items-center justify-center mb-8 shadow-sm">
-            <FileText size={40} className="text-[var(--text-muted)]" />
+            <div className="flex flex-col items-center justify-center py-24 animate-fade-in">
+              <div className="w-24 h-24 rounded-3xl bg-[var(--bg-secondary)] border border-[var(--border)] flex items-center justify-center mb-8 shadow-sm transition-transform hover:scale-110 duration-500">
+                <FileText size={40} className="text-[var(--text-muted)]" />
+              </div>
+
+              <h1 className="text-[26px] font-bold text-[var(--text-primary)] mb-3 tracking-tight">
+                {workspace.name}
+              </h1>
+
+              <p className="text-[14px] text-[var(--text-muted)] text-center leading-relaxed max-w-[320px]">
+                This workspace is empty. Start by creating a page in the sidebar.
+              </p>
+            </div>
           </div>
-
-          <h1 className="text-[26px] font-bold text-[var(--text-primary)] mb-3 tracking-tight">
-            {workspace.name}
-          </h1>
-
-          <p className="text-[14px] text-[var(--text-muted)] text-center leading-relaxed max-w-[320px]">
-            This workspace is empty. Start by creating a page in the sidebar.
-          </p>
-        </div>
-      </div>
+        )}
+      </main>
     </WorkspaceLayout>
   );
 }
