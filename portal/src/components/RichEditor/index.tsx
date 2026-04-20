@@ -239,7 +239,6 @@ export default function RichEditor({
       dom.removeEventListener('mousemove', handleMouseMove);
     };
   }, [editor]);
-  }, [editor]);
 
   // Enable editing on click
   function handleClick() {
