@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Loader2, AlertCircle, CheckCircle2, ArrowLeft } from 'lucide-react';
 import { api } from '@/lib/api';
@@ -10,6 +10,7 @@ export default function Signup() {
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [mounted, setMounted] = useState(false);
   
   // Form fields
   const [formData, setFormData] = useState({
@@ -19,6 +20,10 @@ export default function Signup() {
     password: '',
     confirmPassword: ''
   });
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -106,6 +111,8 @@ export default function Signup() {
       setLoading(false);
     }
   };
+
+  if (!mounted) return null;
 
   if (success) {
     return (
