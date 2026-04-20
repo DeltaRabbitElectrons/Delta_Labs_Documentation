@@ -600,10 +600,10 @@ function SortableSidebarNode({
   const isEditing = editingId === node.id;
 
   return (
-    <div ref={setNodeRef} style={style} className="group/item select-none animate-node-enter">
+    <div ref={setNodeRef} style={style} className="select-none animate-node-enter">
       <div 
         className={`
-          flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg cursor-pointer transition-all duration-200 relative
+          group/item flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg cursor-pointer transition-all duration-200 relative
           ${isActive ? 'bg-[var(--accent-light)] text-[var(--accent-primary)]' : 'hover:bg-slate-50 text-slate-500 hover:text-slate-900'}
         `}
         onClick={() => node.type === 'page' ? onNavigate(node.slug!) : onToggleNode(node.id)}
