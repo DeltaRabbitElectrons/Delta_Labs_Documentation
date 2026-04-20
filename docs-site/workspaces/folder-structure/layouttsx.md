@@ -1,9 +1,9 @@
 ---
-title: layout.tsx
-sidebar_label: layout.tsx
+title: Ws:Folder Structure:Layouttsx
+sidebar_label: Ws:Folder Structure:Layouttsx
 id: layouttsx
 ---
 
-# layout.tsx
+# <span style="color: rgb(22, 163, 74);">layout.tsx</span>
 
-Start writing here...
+<span style="color: rgb(22, 163, 74);">layout</span> <span style="color: rgb(220, 38, 38);"> efsgs</span>
