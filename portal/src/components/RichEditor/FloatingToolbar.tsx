@@ -9,7 +9,7 @@ import {
   Code, Code2, AlignLeft, AlignCenter, AlignRight,
   Table as TableIcon, Image as ImageIcon, Link as LinkIcon,
   Undo2, Redo2, GripHorizontal, Video, Unlink, Upload,
-  ExternalLink, BookOpen, Search, Trash2
+  ExternalLink, BookOpen, Search, Trash2, Palette, Plus, ChevronDown
 } from 'lucide-react';
 import { api } from '@/lib/api';
 
@@ -275,12 +275,55 @@ export default function FloatingToolbar({ editor }: FloatingToolbarProps) {
 
           {/* Table Management Actions — only show when inside a table */}
           {editor.isActive('table') && (
-            <div className="flex bg-blue-50 p-1 rounded-[10px] gap-0.5 border border-blue-100 animate-in fade-in zoom-in duration-200">
-               <ToolBtn icon={() => <div className="text-[10px] font-bold">R+</div>} label="Add Row Below" onClick={() => editor.chain().focus().addRowAfter().run()} />
+            <div className="flex bg-blue-50 p-1 rounded-[10px] gap-0.5 border border-blue-100 animate-in fade-in zoom-in duration-200 relative">
+               <ToolBtn icon={Plus} label="Add Row Below" onClick={() => editor.chain().focus().addRowAfter().run()} />
                <ToolBtn icon={() => <div className="text-[10px] font-bold">R-</div>} label="Delete Row" onClick={() => editor.chain().focus().deleteRow().run()} danger />
                <div className="w-px h-4 bg-blue-200 my-auto mx-0.5" />
-               <ToolBtn icon={() => <div className="text-[10px] font-bold">C+</div>} label="Add Col After" onClick={() => editor.chain().focus().addColumnAfter().run()} />
+               <ToolBtn icon={Plus} label="Add Col After" onClick={() => editor.chain().focus().addColumnAfter().run()} />
                <ToolBtn icon={() => <div className="text-[10px] font-bold">C-</div>} label="Delete Col" onClick={() => editor.chain().focus().deleteColumn().run()} danger />
+               <div className="w-px h-4 bg-blue-200 my-auto mx-0.5" />
+               
+               {/* Cell Coloring */}
+               <div className="relative group/color">
+                  <ToolBtn 
+                    icon={Palette} 
+                    label="Cell Color" 
+                    active={activePopup === 'table-color'} 
+                    onClick={() => togglePopup('table-color')} 
+                  />
+                  {activePopup === 'table-color' && (
+                    <Popup>
+                      <p className="text-[11px] font-black uppercase tracking-widest text-slate-400 mb-3">Cell Background</p>
+                      <div className="grid grid-cols-5 gap-2">
+                        {[
+                          { name: 'None', color: 'transparent' },
+                          { name: 'Blue', color: '#eff6ff' },
+                          { name: 'Green', color: '#f0fdf4' },
+                          { name: 'Yellow', color: '#fefce8' },
+                          { name: 'Red', color: '#fef2f2' },
+                          { name: 'Purple', color: '#faf5ff' },
+                          { name: 'Orange', color: '#fff7ed' },
+                          { name: 'Gray', color: '#f8fafc' },
+                          { name: 'Slate', color: '#f1f5f9' },
+                          { name: 'Selection', color: 'var(--bg-active)' }
+                        ].map((c) => (
+                          <button
+                            key={c.name}
+                            title={c.name}
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              editor.chain().focus().setCellAttribute('backgroundColor', c.color).run();
+                              closePopup();
+                            }}
+                            className="w-8 h-8 rounded-lg border border-slate-200 transition-transform hover:scale-110 shadow-xs"
+                            style={{ backgroundColor: c.color }}
+                          />
+                        ))}
+                      </div>
+                    </Popup>
+                  )}
+               </div>
+
                <div className="w-px h-4 bg-blue-200 my-auto mx-0.5" />
                <ToolBtn icon={Trash2} label="Delete Table" onClick={() => editor.chain().focus().deleteTable().run()} danger />
             </div>

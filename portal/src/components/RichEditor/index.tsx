@@ -113,8 +113,36 @@ export default function RichEditor({
         handleWidth: 10, // Make handles easier to grab
       }),
       TableRow,
-      TableHeader,
-      TableCell,
+      TableHeader.extend({
+        addAttributes() {
+          return {
+            ...this.parent?.(),
+            backgroundColor: {
+              default: null,
+              parseHTML: element => element.style.backgroundColor || null,
+              renderHTML: attributes => {
+                if (!attributes.backgroundColor) return {};
+                return { style: `background-color: ${attributes.backgroundColor}` };
+              }
+            }
+          };
+        }
+      }),
+      TableCell.extend({
+        addAttributes() {
+          return {
+            ...this.parent?.(),
+            backgroundColor: {
+              default: null,
+              parseHTML: element => element.style.backgroundColor || null,
+              renderHTML: attributes => {
+                if (!attributes.backgroundColor) return {};
+                return { style: `background-color: ${attributes.backgroundColor}` };
+              }
+            }
+          };
+        }
+      }),
       ResizableImage,
       ResizableVideo,
       Youtube.configure({ controls: true, nocookie: true }),
@@ -188,10 +216,29 @@ export default function RichEditor({
     const dom = editor.options.element;
     if (!dom || !(dom instanceof HTMLElement)) return;
 
+    const handleMouseMove = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const table = target.closest('table');
+      if (!table) return;
+
+      const rect = table.getBoundingClientRect();
+      const edgeThreshold = 30; // pixels from edge
+
+      // check if near bottom edge
+      if (e.clientY > rect.bottom - edgeThreshold && e.clientY < rect.bottom + edgeThreshold) {
+         // show add row button... (logic simplified for brevity, will use CSS handles)
+      }
+    };
+
     // Use capture phase (true) to ensure our global resize handle catches the event 
     // before Tiptap's internal selection logic
     dom.addEventListener('mousedown', handleMouseDown, true);
-    return () => dom.removeEventListener('mousedown', handleMouseDown, true);
+    dom.addEventListener('mousemove', handleMouseMove);
+    return () => {
+      dom.removeEventListener('mousedown', handleMouseDown, true);
+      dom.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, [editor]);
   }, [editor]);
 
   // Enable editing on click
