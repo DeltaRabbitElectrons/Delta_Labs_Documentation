@@ -5,7 +5,7 @@ from typing import List, Optional
 from bson import ObjectId
 from app.database import get_db
 from app.auth.jwt import hash_pw, make_token
-from app.middleware.auth_guard import require_super_admin
+from app.middleware.auth_guard import require_super_admin, require_approved
 from app.services import otp_service, email_service
 import logging
 
@@ -26,6 +26,7 @@ class AdminUserItem(BaseModel):
     phone_number: Optional[str] = None
     role: Optional[str] = None
     status: Optional[str] = None
+    last_active: Optional[datetime] = None
     created_at: datetime
 
 class RoleUpdateIn(BaseModel):
@@ -39,7 +40,7 @@ class VerifyOTPIn(BaseModel):
     otp: str
 
 @router.get('/admin/users', response_model=List[AdminUserItem])
-async def get_all_admins(current_user=Depends(require_super_admin)):
+async def get_all_admins(current_user=Depends(require_approved)):
     """List all approved admins for management (Super Admin only)."""
     db = get_db()
     admins = await db.users.find({'status': 'approved'}).to_list(100)
@@ -52,9 +53,21 @@ async def get_all_admins(current_user=Depends(require_super_admin)):
             phone_number=a.get('phone_number'),
             role=a.get('role'),
             status=a.get('status'),
+            last_active=a.get('last_active'),
             created_at=a.get('createdAt', a.get('created_at', datetime.utcnow()))
         ) for a in admins
     ]
+
+@router.post('/admin/heartbeat')
+async def admin_heartbeat(current_user=Depends(require_approved)):
+    """Update the current admin's last_active timestamp."""
+    db = get_db()
+    now = datetime.utcnow()
+    await db.users.update_one(
+        {'_id': ObjectId(current_user['_id'])},
+        {'$set': {'last_active': now, 'status': 'approved'}} # Ensure they stay approved
+    )
+    return {'status': 'active', 'timestamp': now}
 
 @router.patch('/admin/users/{admin_id}/role')
 async def update_admin_role(admin_id: str, body: RoleUpdateIn, current_user=Depends(require_super_admin)):
