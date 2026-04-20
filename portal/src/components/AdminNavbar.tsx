@@ -13,7 +13,8 @@ import {
 import { useRouter } from 'next/navigation';
 import WorkspaceSwitcher from './WorkspaceSwitcher';
 import PublishButton from './PublishButton';
-import PresenceAvatars from './PresenceAvatars';
+import { PresenceList, AdminPresence } from './PresenceAvatars';
+import { api } from '@/lib/api';
 
 interface AdminNavbarProps {
   pageTitle?: string;
@@ -32,6 +33,37 @@ export default function AdminNavbar({
   const [userRole, setUserRole] = useState('');
   const [scrolled, setScrolled] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [admins, setAdmins] = useState<AdminPresence[]>([]);
+  
+  useEffect(() => {
+    const fetchAdmins = async () => {
+      try {
+        const data = await api.get<AdminPresence[]>('/admin/users');
+        setAdmins(data);
+      } catch {
+        // Silently fail
+      }
+    };
+
+    const sendHeartbeat = async () => {
+      try {
+        await api.post('/admin/heartbeat', {});
+      } catch {
+        // Heartbeat failed
+      }
+    };
+
+    fetchAdmins();
+    sendHeartbeat();
+
+    // Heartbeat every 5 seconds for real-time feel
+    const interval = setInterval(() => {
+      fetchAdmins();
+      sendHeartbeat();
+    }, 5000);
+    
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     setUserName(localStorage.getItem('name') || 'Admin');
@@ -118,8 +150,6 @@ export default function AdminNavbar({
         )}
 
         <div className="h-6 w-px bg-[var(--border)] mx-1" />
-        <PresenceAvatars />
-        <div className="h-6 w-px bg-[var(--border)] mx-1" />
         <PublishButton />
         <div className="h-6 w-px bg-[var(--border)] mx-1" />
 
@@ -168,7 +198,19 @@ export default function AdminNavbar({
                    </div>
                 </div>
                 
-                <div className="p-2 flex flex-col gap-1">
+                 <div className="p-2 flex flex-col gap-1">
+                   {/* Team Presence in Menu */}
+                   <div className="px-3 py-1.5 flex items-center justify-between">
+                     <span className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest">Team Presence</span>
+                     <div className="flex items-center gap-1.5">
+                       <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                       <span className="text-[9px] font-bold text-emerald-500">Live</span>
+                     </div>
+                   </div>
+                   <PresenceList admins={admins} currentEmail={userEmail} maxHeight="180px" />
+                   
+                   <div className="h-px bg-[var(--border)] mx-3 my-1 opacity-50" />
+
                    {userRole === 'super_admin' && (
                      <>
                        <div className="px-3 py-2 text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest">Management</div>
