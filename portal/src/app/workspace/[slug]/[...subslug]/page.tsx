@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import DocsSidebar from '@/components/DocsSidebar';
 import EditableBlock, { ChangeLogEntry } from '@/components/EditableBlock';
@@ -8,8 +8,8 @@ import { api } from '@/lib/api';
 import RichEditor from '@/components/RichEditor';
 import AdminNavbar from '@/components/AdminNavbar';
 import HistoryModal from '@/components/HistoryModal';
-import LoadingScreen from '@/components/LoadingScreen';
 import { ChevronRight } from 'lucide-react';
+import { pageCache } from '@/lib/pageCache';
 
 interface PageData {
   slug: string;
@@ -35,6 +35,7 @@ export default function WorkspacePageContent() {
   const [showHistory, setShowHistory] = useState(false);
   const [loading, setLoading] = useState(false);
   const [changeMap, setChangeMap] = useState<Record<string, ChangeLogEntry>>({});
+  const loadingSlugRef = useRef<string>('');
 
   useEffect(() => {
     if (!localStorage.getItem('portal_token')) {
@@ -43,99 +44,136 @@ export default function WorkspacePageContent() {
     }
   }, [router]);
 
-  const loadPage = async (targetSlug: string) => {
-    try {
-      setPage(null);
-      setChangeMap({});
-      const data = await api.get<PageData>(`/pages/${targetSlug}?workspace=${workspaceSlug}`);
-      setPage(data);
-      const map: Record<string, ChangeLogEntry> = {};
-      (data.change_log || []).forEach(entry => {
-        map[entry.block_id] = entry;
-      });
-      setChangeMap(map);
-    } catch {
-      router.push(`/workspace/${workspaceSlug}`);
-    }
+  const buildChangeMap = (data: PageData): Record<string, ChangeLogEntry> => {
+    const map: Record<string, ChangeLogEntry> = {};
+    (data.change_log || []).forEach(entry => {
+      map[entry.block_id] = entry;
+    });
+    return map;
   };
+
+  const loadPage = useCallback(async (targetSlug: string) => {
+    const cacheKey = `${workspaceSlug}:${targetSlug}`;
+    loadingSlugRef.current = cacheKey;
+
+    // 1. Instant cache hit — show immediately
+    const cached = pageCache.get(cacheKey);
+    if (cached) {
+      setPage(cached);
+      setChangeMap(buildChangeMap(cached));
+    }
+
+    // 2. Always fetch fresh in background
+    try {
+      const data = await api.get<PageData>(`/pages/${targetSlug}?workspace=${workspaceSlug}`);
+      if (loadingSlugRef.current === cacheKey) {
+        pageCache.set(cacheKey, data);
+        setPage(data);
+        setChangeMap(buildChangeMap(data));
+      }
+    } catch {
+      if (!cached) {
+        router.push(`/workspace/${workspaceSlug}`);
+      }
+    }
+  }, [workspaceSlug, router]);
 
   useEffect(() => {
     if (rawSlug) loadPage(rawSlug);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rawSlug, workspaceSlug]);
 
-  if (!page) {
-    return <LoadingScreen message="Loading Workspace Content" />;
-  }
+  const displayTitle = page?.title || rawSlug.split('/').pop()?.replace(/-/g, ' ') || '...';
 
   return (
     <div className="min-h-screen bg-white text-[var(--text-primary)] selection:bg-[#eff6ff]">
       <AdminNavbar
-        pageTitle={page.title}
+        pageTitle={displayTitle}
         onShowHistory={() => setShowHistory(true)}
       />
 
       <DocsSidebar
-        currentSlug={page.slug}
+        currentSlug={page?.slug || rawSlug}
         onNavigate={s => router.push(`/workspace/${workspaceSlug}/${s}`)}
         workspaceSlug={workspaceSlug}
       />
 
       <main className="pl-[var(--sidebar-width,280px)] pt-[52px] min-h-screen flex flex-col items-center">
-        {loading && <LoadingScreen message="Saving Changes" fullScreen={true} />}
-
-        <div className="w-full max-w-[800px] px-12 py-20 animate-fade-in">
-          {/* Breadcrumb Context */}
-          <div className="flex items-center gap-2 mb-10 text-[var(--text-muted)] text-[12px] font-medium uppercase tracking-[0.05em]">
-            <span>{workspaceSlug}</span>
-            <ChevronRight size={12} />
-            <span className="text-[var(--text-secondary)]">{page.category}</span>
+        {loading && (
+          <div className="fixed inset-0 z-[200] bg-white/60 backdrop-blur-sm flex items-center justify-center">
+            <div className="w-5 h-5 border-2 border-[var(--accent-primary)] border-t-transparent rounded-full animate-spin" />
           </div>
+        )}
 
-          {/* Title Area */}
-          <div className="mb-12">
-            <EditableBlock
-              blockId="title"
-              field="title"
-              initialValue={page.title}
-              slug={page.slug}
-              workspace={workspaceSlug}
-              isMarkdown={false}
-              className="text-[30px] font-bold text-[var(--text-primary)] tracking-tight leading-tight transition-all duration-150"
-              changeInfo={changeMap['title']}
-            />
-            {page.updatedAt && (
-               <div className="mt-4 flex items-center gap-2 text-[var(--text-muted)] text-[12px]">
-                  <span>Last edited {new Date(page.updatedAt).toLocaleDateString()}</span>
-                  <div className="w-1 h-1 rounded-full bg-[var(--border)]" />
-                  <span>By {page.lastEditedBy || 'System'}</span>
-               </div>
-            )}
+        {page ? (
+          <div className="w-full max-w-[800px] px-12 py-20">
+            {/* Breadcrumb Context */}
+            <div className="flex items-center gap-2 mb-10 text-[var(--text-muted)] text-[12px] font-medium uppercase tracking-[0.05em]">
+              <span>{workspaceSlug}</span>
+              <ChevronRight size={12} />
+              <span className="text-[var(--text-secondary)]">{page.category}</span>
+            </div>
+
+            {/* Title Area */}
+            <div className="mb-12">
+              <EditableBlock
+                blockId="title"
+                field="title"
+                initialValue={page.title}
+                slug={page.slug}
+                workspace={workspaceSlug}
+                isMarkdown={false}
+                className="text-[30px] font-bold text-[var(--text-primary)] tracking-tight leading-tight transition-all duration-150"
+                changeInfo={changeMap['title']}
+              />
+              {page.updatedAt && (
+                 <div className="mt-4 flex items-center gap-2 text-[var(--text-muted)] text-[12px]">
+                    <span>Last edited {new Date(page.updatedAt).toLocaleDateString()}</span>
+                    <div className="w-1 h-1 rounded-full bg-[var(--border)]" />
+                    <span>By {page.lastEditedBy || 'System'}</span>
+                 </div>
+              )}
+            </div>
+
+            {/* Main Content Area */}
+            <section className="prose prose-slate max-w-none">
+              <RichEditor
+                blockId="content"
+                content={page.content}
+                slug={page.slug}
+                workspace={workspaceSlug}
+                changeInfo={changeMap['content']}
+              />
+            </section>
           </div>
-
-          {/* Main Content Area */}
-          <section className="prose prose-slate max-w-none">
-            <RichEditor
-              blockId="content"
-              content={page.content}
-              slug={page.slug}
-              workspace={workspaceSlug}
-              changeInfo={changeMap['content']}
-            />
-          </section>
-        </div>
+        ) : (
+          /* Minimal skeleton — only shown on first-ever visit */
+          <div className="w-full max-w-[800px] px-12 py-20">
+            <div className="h-3 w-32 bg-slate-100 rounded mb-10" />
+            <div className="h-8 w-64 bg-slate-100 rounded mb-4" />
+            <div className="h-3 w-48 bg-slate-50 rounded mb-12" />
+            <div className="space-y-3">
+              <div className="h-4 w-full bg-slate-50 rounded" />
+              <div className="h-4 w-5/6 bg-slate-50 rounded" />
+              <div className="h-4 w-4/6 bg-slate-50 rounded" />
+            </div>
+          </div>
+        )}
       </main>
 
-      <HistoryModal
-        slug={page.slug}
-        workspace={workspaceSlug}
-        isOpen={showHistory}
-        onClose={() => setShowHistory(false)}
-        onRevertSuccess={() => {
-          setLoading(true);
-          loadPage(page.slug).finally(() => setLoading(false));
-        }}
-      />
+      {page && (
+        <HistoryModal
+          slug={page.slug}
+          workspace={workspaceSlug}
+          isOpen={showHistory}
+          onClose={() => setShowHistory(false)}
+          onRevertSuccess={() => {
+            setLoading(true);
+            pageCache.invalidate(`${workspaceSlug}:${page.slug}`);
+            loadPage(page.slug).finally(() => setLoading(false));
+          }}
+        />
+      )}
     </div>
   );
 }

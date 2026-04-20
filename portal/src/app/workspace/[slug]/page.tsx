@@ -109,18 +109,24 @@ export default function WorkspacePage() {
     >
       <main className="flex-1 flex flex-col items-center">
         {(loading || !workspace) ? (
-           <div className="flex-1 flex items-center justify-center animate-pulse">
-             <LoadingScreen message="Initializing Workspace" />
+           /* Lightweight skeleton — no spinner, no animation, just placeholders */
+           <div className="w-full max-w-[800px] px-12 py-20">
+             <div className="h-3 w-32 bg-slate-100 rounded mb-10" />
+             <div className="flex flex-col items-center justify-center py-24">
+               <div className="w-24 h-24 rounded-3xl bg-slate-50 mb-8" />
+               <div className="h-7 w-48 bg-slate-100 rounded mb-3" />
+               <div className="h-4 w-64 bg-slate-50 rounded" />
+             </div>
            </div>
         ) : (
-          <div className="w-full max-w-[800px] px-12 py-20 animate-fade-in transition-all">
+          <div className="w-full max-w-[800px] px-12 py-20">
             <div className="flex items-center gap-2 mb-10 text-[var(--text-muted)] text-[12px] font-medium uppercase tracking-[0.05em]">
               <span>Workspaces</span>
               <ChevronRight size={12} />
               <span className="text-[var(--text-secondary)]">{workspace.name}</span>
             </div>
 
-            <div className="flex flex-col items-center justify-center py-24 animate-fade-in">
+            <div className="flex flex-col items-center justify-center py-24">
               <div className="w-24 h-24 rounded-3xl bg-[var(--bg-secondary)] border border-[var(--border)] flex items-center justify-center mb-8 shadow-sm transition-transform hover:scale-110 duration-500">
                 <FileText size={40} className="text-[var(--text-muted)]" />
               </div>

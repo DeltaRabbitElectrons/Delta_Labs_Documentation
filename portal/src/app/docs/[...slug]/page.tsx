@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import DocsSidebar from '@/components/DocsSidebar';
 import EditableBlock, { ChangeLogEntry } from '@/components/EditableBlock';
@@ -8,8 +8,8 @@ import { api } from '@/lib/api';
 import RichEditor from '@/components/RichEditor';
 import AdminNavbar from '@/components/AdminNavbar';
 import HistoryModal from '@/components/HistoryModal';
-import LoadingScreen from '@/components/LoadingScreen';
 import { ChevronRight } from 'lucide-react';
+import { pageCache } from '@/lib/pageCache';
 
 interface PageData {
   slug: string;
@@ -41,14 +41,11 @@ export default function EditableDocs() {
 
   const slug = cleanSlug;
 
-
-
   const [page, setPage] = useState<PageData | null>(null);
   const [showHistory, setShowHistory] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [pageLoading, setPageLoading] = useState(true);
   const [changeMap, setChangeMap] = useState<Record<string, ChangeLogEntry>>({});
-  const [isNewPage] = useState(false);
+  const loadingSlugRef = useRef<string>('');
 
   useEffect(() => {
     if (!localStorage.getItem('portal_token')) {
@@ -57,32 +54,47 @@ export default function EditableDocs() {
     }
   }, [router]);
 
-  const loadPage = async (targetSlug: string) => {
-    try {
-      setPageLoading(true);
-      // We purposefully DO NOT setPage(null) here so the sidebar/navbar remain visible
-      setChangeMap({});
-      const data = await api.get<PageData>(`/pages/${targetSlug}`);
-      setPage(data);
-      const map: Record<string, ChangeLogEntry> = {};
-      (data.change_log || []).forEach(entry => {
-        map[entry.block_id] = entry;
-      });
-      setChangeMap(map);
-    } catch {
-      router.push('/docs');
-    } finally {
-      setPageLoading(false);
-    }
+  const buildChangeMap = (data: PageData): Record<string, ChangeLogEntry> => {
+    const map: Record<string, ChangeLogEntry> = {};
+    (data.change_log || []).forEach(entry => {
+      map[entry.block_id] = entry;
+    });
+    return map;
   };
+
+  const loadPage = useCallback(async (targetSlug: string) => {
+    loadingSlugRef.current = targetSlug;
+    
+    // 1. Check cache first — if we have it, show it IMMEDIATELY (zero delay)
+    const cached = pageCache.get(targetSlug);
+    if (cached) {
+      setPage(cached);
+      setChangeMap(buildChangeMap(cached));
+    }
+
+    // 2. Always fetch fresh data in the background (stale-while-revalidate)
+    try {
+      const data = await api.get<PageData>(`/pages/${targetSlug}`);
+      // Only apply if we're still on the same slug (user didn't navigate away)
+      if (loadingSlugRef.current === targetSlug) {
+        pageCache.set(targetSlug, data);
+        setPage(data);
+        setChangeMap(buildChangeMap(data));
+      }
+    } catch {
+      // If we had cached data, keep showing it. Otherwise redirect.
+      if (!cached) {
+        router.push('/docs');
+      }
+    }
+  }, [router]);
 
   useEffect(() => {
     if (slug && cleanSlug === rawSlug) loadPage(slug);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
 
-  // If we don't have page data yet, we can't show the RichEditor, 
-  // but we should STILL show the Sidebar and Navbar to avoid a full-screen reload flicker.
+  // Derive display title from whatever we have
   const displayTitle = page?.title || cleanSlug.split('/').pop()?.replace(/-/g, ' ') || '...';
 
   return (
@@ -95,23 +107,18 @@ export default function EditableDocs() {
 
       <DocsSidebar
         currentSlug={page?.slug || cleanSlug}
-        onNavigate={s => {
-          // If we are navigating to the same workspace, we can just trigger a new load
-          // without a full route push if we really wanted to go deep, 
-          // but Next.js router.push is fast enough if we don't wipe the layout.
-          router.push(`/docs/${s}`);
-        }}
+        onNavigate={s => router.push(`/docs/${s}`)}
       />
 
       <main className="pl-[var(--sidebar-width,280px)] pt-[52px] min-h-screen flex flex-col items-center">
-        {loading && <LoadingScreen message="Synchronizing Changes" fullScreen={true} />}
+        {loading && (
+          <div className="fixed inset-0 z-[200] bg-white/60 backdrop-blur-sm flex items-center justify-center">
+            <div className="w-5 h-5 border-2 border-[var(--accent-primary)] border-t-transparent rounded-full animate-spin" />
+          </div>
+        )}
 
-        {!page ? (
-           <div className="flex-1 flex items-center justify-center">
-             <LoadingScreen message="Unlocking Document stream" />
-           </div>
-        ) : (
-          <div className={`w-full max-w-[800px] px-12 py-20 transition-all duration-300 ${pageLoading ? 'opacity-30 pointer-events-none blur-[2px] scale-[0.995]' : 'opacity-100 scale-100'}`}>
+        {page ? (
+          <div className="w-full max-w-[800px] px-12 py-20">
             {/* Breadcrumb Context */}
             <div className="flex items-center gap-2 mb-10 text-[var(--text-muted)] text-[12px] font-medium uppercase tracking-[0.05em]">
               <span>Documentation</span>
@@ -149,6 +156,18 @@ export default function EditableDocs() {
               />
             </section>
           </div>
+        ) : (
+          /* Only shows on the very first page load ever — a minimal skeleton */
+          <div className="w-full max-w-[800px] px-12 py-20 animate-pulse">
+            <div className="h-3 w-32 bg-slate-100 rounded mb-10" />
+            <div className="h-8 w-64 bg-slate-100 rounded mb-4" />
+            <div className="h-3 w-48 bg-slate-50 rounded mb-12" />
+            <div className="space-y-3">
+              <div className="h-4 w-full bg-slate-50 rounded" />
+              <div className="h-4 w-5/6 bg-slate-50 rounded" />
+              <div className="h-4 w-4/6 bg-slate-50 rounded" />
+            </div>
+          </div>
         )}
       </main>
 
@@ -159,6 +178,7 @@ export default function EditableDocs() {
           onClose={() => setShowHistory(false)}
           onRevertSuccess={() => {
             setLoading(true);
+            pageCache.invalidate(page.slug);
             loadPage(page.slug).finally(() => setLoading(false));
           }}
         />
