@@ -115,7 +115,7 @@ export default function AdminNavbar({
                <ChevronRight size={12} className="opacity-50" />
              </div>
              <span className="text-[13px] font-bold text-[var(--text-primary)] truncate max-w-[180px]">
-               {pageTitle}
+               {pageTitle} (v2.2-RED-ALERT)
              </span>
              <div className="h-3 w-px bg-[var(--border)] opacity-30" />
              <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[var(--accent-primary)] text-white text-[9px] font-black uppercase tracking-widest shadow-sm">
