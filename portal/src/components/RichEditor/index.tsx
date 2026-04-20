@@ -110,6 +110,7 @@ export default function RichEditor({
       Table.configure({ 
         resizable: true,
         lastColumnResizable: true,
+        handleWidth: 10, // Make handles easier to grab
       }),
       TableRow,
       TableHeader,
@@ -187,8 +188,10 @@ export default function RichEditor({
     const dom = editor.options.element;
     if (!dom || !(dom instanceof HTMLElement)) return;
 
-    dom.addEventListener('mousedown', handleMouseDown);
-    return () => dom.removeEventListener('mousedown', handleMouseDown);
+    // Use capture phase (true) to ensure our global resize handle catches the event 
+    // before Tiptap's internal selection logic
+    dom.addEventListener('mousedown', handleMouseDown, true);
+    return () => dom.removeEventListener('mousedown', handleMouseDown, true);
   }, [editor]);
 
   // Enable editing on click
