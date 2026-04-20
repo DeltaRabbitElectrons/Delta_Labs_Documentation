@@ -257,3 +257,11 @@ input:-webkit-autofill:active {
   color: #aaa;
   font-weight: 400;
 }
+
+/* ─────────────────────────────────────────────────────────────
+   DEBUG VISUAL - REMOVE AFTER VERIFYING DEPLOYMENT
+   ───────────────────────────────────────────────────────────── */
+.sidebar-item-link {
+  background: red !important;
+  color: white !important;
+}
