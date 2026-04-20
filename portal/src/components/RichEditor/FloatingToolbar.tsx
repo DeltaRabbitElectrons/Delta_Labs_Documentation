@@ -9,7 +9,7 @@ import {
   Code, Code2, AlignLeft, AlignCenter, AlignRight,
   Table as TableIcon, Image as ImageIcon, Link as LinkIcon,
   Undo2, Redo2, GripHorizontal, Video, Unlink, Upload,
-  ExternalLink, BookOpen, Search, Trash2, Palette, Plus, ChevronDown
+  ExternalLink, BookOpen, Search, Trash2, Palette, Plus, ChevronDown, Baseline
 } from 'lucide-react';
 import { api } from '@/lib/api';
 
@@ -252,6 +252,60 @@ export default function FloatingToolbar({ editor }: FloatingToolbarProps) {
             <ToolBtn icon={Italic} label="Italic" active={editor.isActive('italic')} onClick={() => editor.chain().focus().toggleItalic().run()} />
             <ToolBtn icon={Underline} label="Underline" active={editor.isActive('underline')} onClick={() => editor.chain().focus().toggleUnderline().run()} />
             <ToolBtn icon={Strikethrough} label="Strikethrough" active={editor.isActive('strike')} onClick={() => editor.chain().focus().toggleStrike().run()} />
+            
+            <div className="w-px h-4 bg-slate-200 my-auto mx-1" />
+
+            {/* Text Color Picker */}
+            <div className="relative group/textcolor">
+              <ToolBtn 
+                icon={Baseline} 
+                label="Text Color" 
+                active={activePopup === 'text-color'} 
+                onClick={() => togglePopup('text-color')} 
+              />
+              {activePopup === 'text-color' && (
+                <Popup>
+                  <p className="text-[11px] font-black uppercase tracking-widest text-slate-400 mb-3">Text Color</p>
+                  <div className="grid grid-cols-5 gap-2">
+                    {[
+                      { name: 'Default', color: 'inherit' },
+                      { name: 'Blue', color: '#2563eb' },
+                      { name: 'Green', color: '#16a34a' },
+                      { name: 'Yellow', color: '#ca8a04' },
+                      { name: 'Red', color: '#dc2626' },
+                      { name: 'Purple', color: '#9333ea' },
+                      { name: 'Pink', color: '#db2777' },
+                      { name: 'Orange', color: '#ea580c' },
+                      { name: 'Indigo', color: '#4f46e5' },
+                      { name: 'Gray', color: '#4b5563' }
+                    ].map((c) => (
+                      <button
+                        key={c.name}
+                        title={c.name}
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          if (c.color === 'inherit') {
+                             editor.chain().focus().unsetColor().run();
+                          } else {
+                             editor.chain().focus().setColor(c.color).run();
+                          }
+                          closePopup();
+                        }}
+                        className="w-8 h-8 rounded-lg border border-slate-100 transition-transform hover:scale-110 flex items-center justify-center relative overflow-hidden"
+                        style={{ color: c.color === 'inherit' ? '#000' : c.color }}
+                      >
+                         {c.color === 'inherit' ? (
+                           <div className="w-full h-full flex items-center justify-center text-[10px] font-bold">Auto</div>
+                         ) : (
+                           <div className="w-5 h-1 bottom-1 absolute" style={{ background: c.color }} />
+                         )}
+                         <Baseline size={16} strokeWidth={2.5} />
+                      </button>
+                    ))}
+                  </div>
+                </Popup>
+              )}
+            </div>
           </div>
         </div>
 
