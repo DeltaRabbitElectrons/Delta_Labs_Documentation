@@ -531,6 +531,37 @@
                       "label": "Typography.tsx"
                     }
                   ]
+                },
+                {
+                  "type": "category",
+                  "label": "navigation",
+                  "collapsible": true,
+                  "collapsed": false,
+                  "items": [
+                    {
+                      "type": "doc",
+                      "id": "indexts",
+                      "label": "index.ts"
+                    },
+                    {
+                      "type": "doc",
+                      "id": "topnavtsx",
+                      "label": "TopNav.tsx"
+                    }
+                  ]
+                },
+                {
+                  "type": "category",
+                  "label": "system",
+                  "collapsible": true,
+                  "collapsed": false,
+                  "items": [
+                    {
+                      "type": "doc",
+                      "id": "globalauthpendingbartsx",
+                      "label": "GlobalAuthPendingBar.tsx"
+                    }
+                  ]
                 }
               ]
             }
