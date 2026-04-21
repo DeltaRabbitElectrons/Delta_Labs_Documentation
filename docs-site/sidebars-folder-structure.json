@@ -159,6 +159,55 @@
                   "collapsed": false,
                   "items": [
                     {
+                      "type": "category",
+                      "label": "api",
+                      "collapsible": true,
+                      "collapsed": false,
+                      "items": [
+                        {
+                          "type": "doc",
+                          "id": "indexts",
+                          "label": "index.ts"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "category",
+                      "label": "hooks",
+                      "collapsible": true,
+                      "collapsed": false,
+                      "items": [
+                        {
+                          "type": "doc",
+                          "id": "featuresquerykeyts",
+                          "label": "featuresQueryKey.ts"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "indexts",
+                          "label": "index.ts"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "category",
+                      "label": "views",
+                      "collapsible": true,
+                      "collapsed": false,
+                      "items": [
+                        {
+                          "type": "doc",
+                          "id": "featuresquerykeysts",
+                          "label": "FeaturesQueryKeys.ts"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "indexts",
+                          "label": "index.ts"
+                        }
+                      ]
+                    },
+                    {
                       "type": "doc",
                       "id": "indexts",
                       "label": "index.ts"
