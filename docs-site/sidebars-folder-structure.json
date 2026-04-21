@@ -390,6 +390,27 @@
                   ]
                 }
               ]
+            },
+            {
+              "type": "category",
+              "label": "components",
+              "collapsible": true,
+              "collapsed": false,
+              "items": [
+                {
+                  "type": "category",
+                  "label": "features",
+                  "collapsible": true,
+                  "collapsed": false,
+                  "items": [
+                    {
+                      "type": "doc",
+                      "id": "indexts",
+                      "label": "index.ts"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }
