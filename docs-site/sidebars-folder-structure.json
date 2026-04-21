@@ -404,6 +404,45 @@
                   "collapsed": false,
                   "items": [
                     {
+                      "type": "category",
+                      "label": "auth",
+                      "collapsible": true,
+                      "collapsed": false,
+                      "items": [
+                        {
+                          "type": "doc",
+                          "id": "indexts",
+                          "label": "index.ts"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "category",
+                      "label": "feed",
+                      "collapsible": true,
+                      "collapsed": false,
+                      "items": [
+                        {
+                          "type": "doc",
+                          "id": "indexts",
+                          "label": "index.ts"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "category",
+                      "label": "school",
+                      "collapsible": true,
+                      "collapsed": false,
+                      "items": [
+                        {
+                          "type": "doc",
+                          "id": "indexts",
+                          "label": "index.ts"
+                        }
+                      ]
+                    },
+                    {
                       "type": "doc",
                       "id": "indexts",
                       "label": "index.ts"
