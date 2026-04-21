@@ -151,6 +151,19 @@
                       ]
                     }
                   ]
+                },
+                {
+                  "type": "category",
+                  "label": "Features",
+                  "collapsible": true,
+                  "collapsed": false,
+                  "items": [
+                    {
+                      "type": "doc",
+                      "id": "indexts",
+                      "label": "index.ts"
+                    }
+                  ]
                 }
               ]
             }
