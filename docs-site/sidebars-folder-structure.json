@@ -213,6 +213,19 @@
                       "label": "index.ts"
                     }
                   ]
+                },
+                {
+                  "type": "category",
+                  "label": "School",
+                  "collapsible": true,
+                  "collapsed": false,
+                  "items": [
+                    {
+                      "type": "doc",
+                      "id": "indexts",
+                      "label": "index.ts"
+                    }
+                  ]
                 }
               ]
             }
