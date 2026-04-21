@@ -139,6 +139,89 @@
                   "items": [
                     {
                       "type": "category",
+                      "label": "view",
+                      "collapsible": true,
+                      "collapsed": false,
+                      "items": [
+                        {
+                          "type": "doc",
+                          "id": "coursehubviewtsx",
+                          "label": "CourseHubView.tsx"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "category",
+                  "label": "Features",
+                  "collapsible": true,
+                  "collapsed": false,
+                  "items": [
+                    {
+                      "type": "category",
+                      "label": "api",
+                      "collapsible": true,
+                      "collapsed": false,
+                      "items": [
+                        {
+                          "type": "doc",
+                          "id": "indexts",
+                          "label": "index.ts"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "category",
+                      "label": "hooks",
+                      "collapsible": true,
+                      "collapsed": false,
+                      "items": [
+                        {
+                          "type": "doc",
+                          "id": "featuresquerykeyts",
+                          "label": "featuresQueryKey.ts"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "indexts",
+                          "label": "index.ts"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "category",
+                      "label": "views",
+                      "collapsible": true,
+                      "collapsed": false,
+                      "items": [
+                        {
+                          "type": "doc",
+                          "id": "featuresquerykeysts",
+                          "label": "FeaturesQueryKeys.ts"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "indexts",
+                          "label": "index.ts"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "doc",
+                      "id": "indexts",
+                      "label": "index.ts"
+                    }
+                  ]
+                },
+                {
+                  "type": "category",
+                  "label": "School",
+                  "collapsible": true,
+                  "collapsed": false,
+                  "items": [
+                    {
+                      "type": "category",
                       "label": "api",
                       "collapsible": true,
                       "collapsed": false,
@@ -165,7 +248,87 @@
                     },
                     {
                       "type": "category",
-                      "label": "features",
+                      "label": "hooks",
+                      "collapsible": true,
+                      "collapsed": false,
+                      "items": [
+                        {
+                          "type": "doc",
+                          "id": "indexts",
+                          "label": "index.ts"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "schoolquerykeyts",
+                          "label": "schoolQueryKey.ts"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "useschoolactiveorgidts",
+                          "label": "useSchoolActiveOrgId.ts"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "category",
+                      "label": "routing",
+                      "collapsible": true,
+                      "collapsed": false,
+                      "items": [
+                        {
+                          "type": "category",
+                          "label": "guards",
+                          "collapsible": true,
+                          "collapsed": false,
+                          "items": [
+                            {
+                              "type": "doc",
+                              "id": "indexts",
+                              "label": "index.ts"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "category",
+                          "label": "hooks",
+                          "collapsible": true,
+                          "collapsed": false,
+                          "items": [
+                            {
+                              "type": "doc",
+                              "id": "indexts",
+                              "label": "index.ts"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "category",
+                      "label": "types",
+                      "collapsible": true,
+                      "collapsed": false,
+                      "items": [
+                        {
+                          "type": "doc",
+                          "id": "indexts",
+                          "label": "index.ts"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "marketplacets",
+                          "label": "marketplace.ts"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "offersts",
+                          "label": "offers.ts"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "category",
+                      "label": "utils",
                       "collapsible": true,
                       "collapsed": false,
                       "items": [
@@ -178,16 +341,194 @@
                     },
                     {
                       "type": "category",
-                      "label": "view",
+                      "label": "views",
                       "collapsible": true,
                       "collapsed": false,
                       "items": [
                         {
                           "type": "doc",
-                          "id": "coursehubviewtsx",
-                          "label": "CourseHubView.tsx"
+                          "id": "indexts",
+                          "label": "index.ts"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "schoolarchiveviewtsx",
+                          "label": "SchoolArchiveView.tsx"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "schoolcreatepageviewtsx",
+                          "label": "SchoolCreatePageView.tsx"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "schoolhomeviewtsx",
+                          "label": "SchoolHomeView.tsx"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "schoolmarketplacelistingviewtsx",
+                          "label": "SchoolMarketplaceListingView.tsx"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "schoolmarketplaceviewtsx",
+                          "label": "SchoolMarketplaceView.tsx"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "schooloffersviewtsx",
+                          "label": "SchoolOffersView.tsx"
                         }
                       ]
+                    },
+                    {
+                      "type": "doc",
+                      "id": "indexts",
+                      "label": "index.ts"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "category",
+              "label": "components",
+              "collapsible": true,
+              "collapsed": false,
+              "items": [
+                {
+                  "type": "category",
+                  "label": "features",
+                  "collapsible": true,
+                  "collapsed": false,
+                  "items": [
+                    {
+                      "type": "category",
+                      "label": "auth",
+                      "collapsible": true,
+                      "collapsed": false,
+                      "items": [
+                        {
+                          "type": "doc",
+                          "id": "indexts",
+                          "label": "index.ts"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "category",
+                      "label": "feed",
+                      "collapsible": true,
+                      "collapsed": false,
+                      "items": [
+                        {
+                          "type": "doc",
+                          "id": "indexts",
+                          "label": "index.ts"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "category",
+                      "label": "school",
+                      "collapsible": true,
+                      "collapsed": false,
+                      "items": [
+                        {
+                          "type": "doc",
+                          "id": "indexts",
+                          "label": "index.ts"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "doc",
+                      "id": "indexts",
+                      "label": "index.ts"
+                    }
+                  ]
+                },
+                {
+                  "type": "category",
+                  "label": "theme",
+                  "collapsible": true,
+                  "collapsed": false,
+                  "items": [
+                    {
+                      "type": "doc",
+                      "id": "indexts",
+                      "label": "index.ts"
+                    },
+                    {
+                      "type": "doc",
+                      "id": "utilsts",
+                      "label": "utils.ts"
+                    },
+                    {
+                      "type": "doc",
+                      "id": "buttontsx",
+                      "label": "Button.tsx"
+                    },
+                    {
+                      "type": "doc",
+                      "id": "cardtsx",
+                      "label": "Card.tsx"
+                    },
+                    {
+                      "type": "doc",
+                      "id": "checkboxtsx",
+                      "label": "Checkbox.tsx"
+                    },
+                    {
+                      "type": "doc",
+                      "id": "dialogtsx",
+                      "label": "Dialog.tsx"
+                    },
+                    {
+                      "type": "doc",
+                      "id": "fieldtsx",
+                      "label": "Field.tsx"
+                    },
+                    {
+                      "type": "doc",
+                      "id": "inputtsx",
+                      "label": "Input.tsx"
+                    },
+                    {
+                      "type": "doc",
+                      "id": "radiogrouptsx",
+                      "label": "RadioGroup.tsx"
+                    },
+                    {
+                      "type": "doc",
+                      "id": "searchinputtsx",
+                      "label": "SearchInput.tsx"
+                    },
+                    {
+                      "type": "doc",
+                      "id": "selecttsx",
+                      "label": "Select.tsx"
+                    },
+                    {
+                      "type": "doc",
+                      "id": "statusbannertsx",
+                      "label": "StatusBanner.tsx"
+                    },
+                    {
+                      "type": "doc",
+                      "id": "tabletsx",
+                      "label": "Table.tsx"
+                    },
+                    {
+                      "type": "doc",
+                      "id": "textareatsx",
+                      "label": "Textarea.tsx"
+                    },
+                    {
+                      "type": "doc",
+                      "id": "typographytsx",
+                      "label": "Typography.tsx"
                     }
                   ]
                 }
