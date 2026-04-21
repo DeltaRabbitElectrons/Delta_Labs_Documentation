@@ -340,6 +340,29 @@
                       ]
                     },
                     {
+                      "type": "category",
+                      "label": "views",
+                      "collapsible": true,
+                      "collapsed": false,
+                      "items": [
+                        {
+                          "type": "doc",
+                          "id": "indexts",
+                          "label": "index.ts"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "schoolarchiveviewtsx",
+                          "label": "SchoolArchiveView.tsx"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "schoolcreatepageviewtsx",
+                          "label": "SchoolCreatePageView.tsx"
+                        }
+                      ]
+                    },
+                    {
                       "type": "doc",
                       "id": "indexts",
                       "label": "index.ts"
