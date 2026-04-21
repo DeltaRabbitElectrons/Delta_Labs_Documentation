@@ -130,6 +130,27 @@
                       ]
                     }
                   ]
+                },
+                {
+                  "type": "category",
+                  "label": "Course",
+                  "collapsible": true,
+                  "collapsed": false,
+                  "items": [
+                    {
+                      "type": "category",
+                      "label": "view",
+                      "collapsible": true,
+                      "collapsed": false,
+                      "items": [
+                        {
+                          "type": "doc",
+                          "id": "coursehubviewtsx",
+                          "label": "CourseHubView.tsx"
+                        }
+                      ]
+                    }
+                  ]
                 }
               ]
             }
