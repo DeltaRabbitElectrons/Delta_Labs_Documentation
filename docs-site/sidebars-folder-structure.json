@@ -359,6 +359,26 @@
                           "type": "doc",
                           "id": "schoolcreatepageviewtsx",
                           "label": "SchoolCreatePageView.tsx"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "schoolhomeviewtsx",
+                          "label": "SchoolHomeView.tsx"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "schoolmarketplacelistingviewtsx",
+                          "label": "SchoolMarketplaceListingView.tsx"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "schoolmarketplaceviewtsx",
+                          "label": "SchoolMarketplaceView.tsx"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "schooloffersviewtsx",
+                          "label": "SchoolOffersView.tsx"
                         }
                       ]
                     },
