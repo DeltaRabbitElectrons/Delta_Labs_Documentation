@@ -2,7 +2,7 @@
   "sidebar_explanation": [
     {
       "type": "category",
-      "label": "group",
+      "label": "Deltalabs_Frontend",
       "collapsible": true,
       "collapsed": false,
       "items": [
