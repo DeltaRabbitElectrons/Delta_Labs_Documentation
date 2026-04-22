@@ -19,71 +19,14 @@
           "items": [
             {
               "type": "category",
-              "label": "app",
-              "collapsible": true,
-              "collapsed": false,
-              "items": [
-                {
-                  "type": "doc",
-                  "id": "readme",
-                  "label": "ReadMe"
-                }
-              ]
-            },
-            {
-              "type": "category",
               "label": "components",
               "collapsible": true,
               "collapsed": false,
               "items": [
                 {
                   "type": "doc",
-                  "id": "readme",
-                  "label": "ReadMe_com"
-                },
-                {
-                  "type": "doc",
                   "id": "readmec",
                   "label": "ReadMe_c"
-                }
-              ]
-            },
-            {
-              "type": "category",
-              "label": "contexts",
-              "collapsible": true,
-              "collapsed": false,
-              "items": [
-                {
-                  "type": "doc",
-                  "id": "readme",
-                  "label": "ReadMe"
-                }
-              ]
-            },
-            {
-              "type": "category",
-              "label": "lib",
-              "collapsible": true,
-              "collapsed": false,
-              "items": [
-                {
-                  "type": "doc",
-                  "id": "readme",
-                  "label": "ReadMe"
-                }
-              ]
-            },
-            {
-              "type": "category",
-              "label": "modules",
-              "collapsible": true,
-              "collapsed": false,
-              "items": [
-                {
-                  "type": "doc",
-                  "id": "readme",
-                  "label": "ReadMe"
                 }
               ]
             }
