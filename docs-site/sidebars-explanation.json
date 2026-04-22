@@ -152,6 +152,19 @@
                       "label": "ReadMe_Auth_Module"
                     }
                   ]
+                },
+                {
+                  "type": "category",
+                  "label": "Features",
+                  "collapsible": true,
+                  "collapsed": false,
+                  "items": [
+                    {
+                      "type": "doc",
+                      "id": "readmefeaturesmodule",
+                      "label": "ReadMe_Features_Module"
+                    }
+                  ]
                 }
               ]
             }
