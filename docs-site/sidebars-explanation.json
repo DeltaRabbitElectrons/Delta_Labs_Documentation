@@ -178,6 +178,19 @@
                       "label": "ReadMe_Feed_Module"
                     }
                   ]
+                },
+                {
+                  "type": "category",
+                  "label": "School",
+                  "collapsible": true,
+                  "collapsed": false,
+                  "items": [
+                    {
+                      "type": "doc",
+                      "id": "readmeschoolmodule",
+                      "label": "ReadMe_School_Module"
+                    }
+                  ]
                 }
               ]
             }
