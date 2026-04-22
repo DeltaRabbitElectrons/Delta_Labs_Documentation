@@ -30,6 +30,19 @@
                 },
                 {
                   "type": "category",
+                  "label": "navigation",
+                  "collapsible": true,
+                  "collapsed": false,
+                  "items": [
+                    {
+                      "type": "doc",
+                      "id": "readmenav",
+                      "label": "ReadMe_Nav"
+                    }
+                  ]
+                },
+                {
+                  "type": "category",
                   "label": "theme",
                   "collapsible": true,
                   "collapsed": false,
