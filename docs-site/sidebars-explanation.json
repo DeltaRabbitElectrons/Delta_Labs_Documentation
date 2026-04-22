@@ -165,6 +165,19 @@
                       "label": "ReadMe_Features_Module"
                     }
                   ]
+                },
+                {
+                  "type": "category",
+                  "label": "Feed",
+                  "collapsible": true,
+                  "collapsed": false,
+                  "items": [
+                    {
+                      "type": "doc",
+                      "id": "readmefeedmodule",
+                      "label": "ReadMe_Feed_Module"
+                    }
+                  ]
                 }
               ]
             }
