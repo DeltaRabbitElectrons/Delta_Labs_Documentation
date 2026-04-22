@@ -53,6 +53,53 @@
                       "label": "ReadMe_Theme"
                     }
                   ]
+                },
+                {
+                  "type": "category",
+                  "label": "features",
+                  "collapsible": true,
+                  "collapsed": false,
+                  "items": [
+                    {
+                      "type": "category",
+                      "label": "auth",
+                      "collapsible": true,
+                      "collapsed": false,
+                      "items": [
+                        {
+                          "type": "doc",
+                          "id": "readmeauth",
+                          "label": "ReadMe_Auth"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "category",
+                      "label": "feed",
+                      "collapsible": true,
+                      "collapsed": false,
+                      "items": [
+                        {
+                          "type": "doc",
+                          "id": "readmefeed",
+                          "label": "ReadMe_Feed"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "category",
+                      "label": "school",
+                      "collapsible": true,
+                      "collapsed": false,
+                      "items": [
+                        {
+                          "type": "doc",
+                          "id": "readmeschool",
+                          "label": "ReadMe_School"
+                        }
+                      ]
+                    }
+                  ]
                 }
               ]
             },
