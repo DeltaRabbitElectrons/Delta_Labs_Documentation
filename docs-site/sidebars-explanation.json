@@ -40,6 +40,11 @@
                   "type": "doc",
                   "id": "readme",
                   "label": "ReadMe_com"
+                },
+                {
+                  "type": "doc",
+                  "id": "readmec",
+                  "label": "ReadMe_c"
                 }
               ]
             },
