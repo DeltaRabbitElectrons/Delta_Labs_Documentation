@@ -29,6 +29,19 @@
                   "label": "ReadMe_c"
                 }
               ]
+            },
+            {
+              "type": "category",
+              "label": "contexts",
+              "collapsible": true,
+              "collapsed": false,
+              "items": [
+                {
+                  "type": "doc",
+                  "id": "readmecontext",
+                  "label": "ReadMe_Context"
+                }
+              ]
             }
           ]
         }
