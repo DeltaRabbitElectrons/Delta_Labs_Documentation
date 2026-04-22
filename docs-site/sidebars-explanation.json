@@ -42,6 +42,19 @@
                   "label": "ReadMe_Context"
                 }
               ]
+            },
+            {
+              "type": "category",
+              "label": "lib",
+              "collapsible": true,
+              "collapsed": false,
+              "items": [
+                {
+                  "type": "doc",
+                  "id": "readmelib",
+                  "label": "ReadMe_Lib"
+                }
+              ]
             }
           ]
         }
