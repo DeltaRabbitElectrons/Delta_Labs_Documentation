@@ -139,6 +139,19 @@
                   "type": "doc",
                   "id": "readmemodules",
                   "label": "ReadMe_Modules"
+                },
+                {
+                  "type": "category",
+                  "label": "Auth",
+                  "collapsible": true,
+                  "collapsed": false,
+                  "items": [
+                    {
+                      "type": "doc",
+                      "id": "readmeauthmodule",
+                      "label": "ReadMe_Auth_Module"
+                    }
+                  ]
                 }
               ]
             }
