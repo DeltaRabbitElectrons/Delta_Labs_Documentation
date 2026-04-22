@@ -55,6 +55,19 @@
                   "label": "ReadMe_Lib"
                 }
               ]
+            },
+            {
+              "type": "category",
+              "label": "modules",
+              "collapsible": true,
+              "collapsed": false,
+              "items": [
+                {
+                  "type": "doc",
+                  "id": "readmemodules",
+                  "label": "ReadMe_Modules"
+                }
+              ]
             }
           ]
         }
