@@ -27,6 +27,19 @@
                   "type": "doc",
                   "id": "readmec",
                   "label": "ReadMe_c"
+                },
+                {
+                  "type": "category",
+                  "label": "theme",
+                  "collapsible": true,
+                  "collapsed": false,
+                  "items": [
+                    {
+                      "type": "doc",
+                      "id": "readmetheme",
+                      "label": "ReadMe_Theme"
+                    }
+                  ]
                 }
               ]
             },
