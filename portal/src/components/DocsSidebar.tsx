@@ -170,6 +170,11 @@ export default function DocsSidebar({
       };
 
       const finalTree = expandActiveParents(healedTree).tree;
+      console.log('Sidebar Load:', { 
+        workspace: workspaceSlug, 
+        current: normalizedCurrent, 
+        treeSize: finalTree.length 
+      });
       setTree(finalTree);
       
       // If we healed it, save it back to clear the draft pollution
@@ -670,7 +675,14 @@ function SortableSidebarNode({
   const normalize = (s: string | undefined | null) => 
     (s || '').toLowerCase().trim().split('/').map(p => p.replace(/^\d+-/, '')).join('/').replace(/^\/+|\/+$/g, '');
 
-  const isActive = node.type === 'page' && normalize(node.slug) === normalize(currentSlug);
+  const normalizedNodeSlug = normalize(node.slug);
+  const normalizedCurrent = normalize(currentSlug);
+  const isActive = node.type === 'page' && normalizedNodeSlug === normalizedCurrent;
+
+  if (isActive) {
+    console.log('Active Node Found:', { label: node.label, slug: node.slug });
+  }
+
   const isEditing = editingId === node.id;
   const activeRef = useRef<HTMLDivElement>(null);
 
