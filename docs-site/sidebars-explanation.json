@@ -7,11 +7,6 @@
       "collapsed": false,
       "items": [
         {
-          "type": "doc",
-          "id": "page",
-          "label": "page"
-        },
-        {
           "type": "category",
           "label": "src",
           "collapsible": true,
@@ -26,7 +21,7 @@
                 {
                   "type": "doc",
                   "id": "readmec",
-                  "label": "ReadMe_c"
+                  "label": "ReadMe"
                 },
                 {
                   "type": "category",
