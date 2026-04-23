@@ -165,6 +165,10 @@ export default function DocsSidebar({
           
           if (nodeFound) treeFound = true;
           
+          if (nodeFound && n.type === 'category') {
+            console.log('📂 Expanding Folder:', { label: n.label, slug: n.slug });
+          }
+          
           return {
             ...n,
             isOpen: nodeFound ? true : (n.isOpen ?? false),
@@ -735,6 +739,7 @@ function SortableSidebarNode({
           group/item flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg cursor-pointer transition-all duration-200 relative
           ${isActive ? 'bg-[var(--accent-primary)]/10 text-[var(--accent-primary)] shadow-sm ring-1 ring-[var(--accent-primary)]/20' : 'hover:bg-slate-50 text-slate-500 hover:text-slate-900'}
         `}
+        style={isActive ? { backgroundColor: 'rgba(23, 74, 95, 0.08)', color: '#174A5F' } : {}}
         onClick={() => node.type === 'page' ? onNavigate(node.slug!) : onToggleNode(node.id)}
       >
         {/* Active Indicator - prominent bar */}
