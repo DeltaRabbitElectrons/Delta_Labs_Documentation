@@ -260,11 +260,30 @@ export default function DocsSidebar({
       }
       return null;
     };
+
+    // Walk up the tree to build the full parent path for unique slugs
+    const findParentPath = (nodes: SidebarNode[], targetId: string, path: string[] = []): string[] | null => {
+      for (const n of nodes) {
+        if (n.id === targetId) return path;
+        if (n.children) {
+          const categorySlug = n.label.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+          const result = findParentPath(n.children, targetId, [...path, categorySlug]);
+          if (result) return result;
+        }
+      }
+      return null;
+    };
+
     const node = findNode(tree);
     const shouldDeriveSlug = isPending && node?.type === 'page';
-    const derivedSlug = shouldDeriveSlug
-      ? label.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
-      : undefined;
+    let derivedSlug: string | undefined;
+    if (shouldDeriveSlug) {
+      const pageName = label.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+      const parentPath = findParentPath(tree, id) || [];
+      derivedSlug = parentPath.length > 0
+        ? `${parentPath.join('/')}/${pageName}`
+        : pageName;
+    }
 
     const updateLabel = (nodes: SidebarNode[]): SidebarNode[] =>
       nodes.map(n => {
@@ -282,9 +301,20 @@ export default function DocsSidebar({
       if (node?.type === 'page' && derivedSlug) {
         try {
           await api.post(`/sidebar/page?workspace=${workspaceSlug}`, { slug: derivedSlug, label });
-        } catch (err) {
+        } catch (err: any) {
           console.error('Failed to create page:', err);
-          addToast('error', 'Failed to create page. Please try again.');
+          const detail = err?.response?.data?.detail || err?.message || '';
+          if (detail.includes('already exists')) {
+            addToast('error', `A page named "${label}" already exists in this folder. Try a different name or move it to another folder.`);
+          } else {
+            addToast('error', 'Failed to create page. Please try again.');
+          }
+          // Remove the failed node from the tree
+          const removeFromTree = (nodes: SidebarNode[]): SidebarNode[] =>
+            nodes.filter(n => n.id !== id).map(n => ({
+              ...n, children: n.children ? removeFromTree(n.children) : []
+            }));
+          setTree(removeFromTree(tree));
           return;
         }
       }

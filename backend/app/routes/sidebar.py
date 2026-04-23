@@ -87,12 +87,13 @@ def transform_node_for_docusaurus(node: dict, valid_slugs: list[str] = None) -> 
     def find_best_slug(target: str) -> str | None:
         if not valid_slugs:
             return target
+        # Require exact match for safety
         if target in valid_slugs:
             return target
-        target_name = target.split("/")[-1]
-        for s in valid_slugs:
-            if s.split("/")[-1] == target_name:
-                return s
+        # Fallback for safe_slug (replacing : with -)
+        safe_target = target.replace(":", "-")
+        if safe_target in valid_slugs:
+            return safe_target
         return None
 
     ntype = node.get("type")
@@ -275,10 +276,14 @@ async def create_page(
     if not slug:
         raise HTTPException(status_code=400, detail="slug is required")
 
-    # Write .md file to GitHub for ALL workspaces to enable history
-    # Sanitize slug for GitHub file path
-    safe_slug = slug.replace(":", "-")
+    # 1. Check MongoDB FIRST to prevent overwriting existing work
+    db_slug = slug if workspace == "docs" else f"ws:{workspace}:{slug}"
+    existing = await db.pages.find_one({"slug": db_slug})
+    if existing:
+        raise HTTPException(status_code=400, detail=f"Page with slug '{slug}' already exists in this workspace")
 
+    # 2. Write .md file to GitHub
+    safe_slug = slug.replace(":", "-")
     default_content = f"""---
 title: {title}
 sidebar_label: {title}
@@ -300,19 +305,15 @@ Start writing here...
         message=f"{workspace}: create page '{title}' by {current_user['name']}"
     )
 
-    # Create MongoDB record (workspace-scoped)
-    # Use workspace prefix for non-docs pages to avoid slug collisions
-    db_slug = slug if workspace == "docs" else f"ws:{workspace}:{slug}"
-    existing = await db.pages.find_one({"slug": db_slug})
-    if not existing:
-        await db.pages.insert_one({
-            "slug": db_slug,
-            "workspace": workspace,
-            "title": title,
-            "content": f"# {title}\n\nStart writing here...",
-            "sidebar_label": title,
-            "change_log": []
-        })
+    # 3. Create MongoDB record
+    await db.pages.insert_one({
+        "slug": db_slug,
+        "workspace": workspace,
+        "title": title,
+        "content": f"# {title}\n\nStart writing here...",
+        "sidebar_label": title,
+        "change_log": []
+    })
     
     return {"success": True, "slug": slug}
 
