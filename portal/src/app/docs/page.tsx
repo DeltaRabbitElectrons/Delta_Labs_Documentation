@@ -22,7 +22,7 @@ export default function DocsHome() {
           // If it's a page and not a junk/draft slug, this is our winner
           if (n.type === 'page' && n.slug && n.slug.length > 1) {
             const lastPart = n.slug.split('/').pop() || '';
-            const isJunk = /^(new-?page|untitled|page|tmp|draft)/i.test(lastPart);
+            const isJunk = /^(new-?page|untitled|page|tmp|draft|readme|index|todo|introduction-?placeholder)/i.test(lastPart);
             if (!isJunk) return n.slug;
           }
           
