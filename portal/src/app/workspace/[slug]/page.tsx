@@ -42,11 +42,16 @@ export default function WorkspacePage() {
                // Find first page with a valid (non-junk) slug
               const JUNK_SLUG_RE = /^(new-?page-?\d*|untitled-?\d*|page-?\d*|new-?\d*|tmp-?\d*|[a-z0-9])$/i;
               const findFirstPage = (nodes: any[]): string | null => {
+                if (!nodes || nodes.length === 0) return null;
                 for (const n of nodes) {
-                  if (n.type === 'page' && n.slug && !JUNK_SLUG_RE.test(n.slug.split('/').pop() || '')) return n.slug;
-                  if (n.children) {
-                    const r = findFirstPage(n.children);
-                    if (r) return r;
+                  if (n.type === 'page' && n.slug && n.slug.length > 1) {
+                    const lastPart = n.slug.split('/').pop() || '';
+                    const isJunk = /^(new-?page|untitled|page|tmp|draft)/i.test(lastPart);
+                    if (!isJunk) return n.slug;
+                  }
+                  if (n.type === 'category' && n.children && n.children.length > 0) {
+                    const firstChild = findFirstPage(n.children);
+                    if (firstChild) return firstChild;
                   }
                 }
                 return null;

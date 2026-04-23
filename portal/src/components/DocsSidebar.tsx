@@ -141,14 +141,31 @@ export default function DocsSidebar({
 
       const healedTree = healTree(sourceTree);
 
-      const initTree = (nodes: SidebarNode[]): SidebarNode[] => 
-        nodes.map(n => ({
-          ...n,
-          isOpen: true,
-          children: n.children ? initTree(n.children) : []
-        }));
+      // 3. AUTO-EXPAND: Find and open all parent folders of the currentSlug
+      const expandActiveParents = (nodes: SidebarNode[]): { tree: SidebarNode[], found: boolean } => {
+        let treeFound = false;
+        const newNodes = nodes.map(n => {
+          let nodeFound = n.slug === currentSlug;
+          let childrenResult = { tree: [] as SidebarNode[], found: false };
+          
+          if (n.children && n.children.length > 0) {
+            childrenResult = expandActiveParents(n.children);
+            if (childrenResult.found) nodeFound = true;
+          }
+          
+          if (nodeFound) treeFound = true;
+          
+          return {
+            ...n,
+            isOpen: nodeFound ? true : (n.isOpen ?? false),
+            children: n.children ? childrenResult.tree : []
+          };
+        });
+        return { tree: newNodes, found: treeFound };
+      };
 
-      setTree(initTree(healedTree));
+      const finalTree = expandActiveParents(healedTree).tree;
+      setTree(finalTree);
       
       // If we healed it, save it back to clear the draft pollution
       if (draft) {
@@ -645,27 +662,36 @@ function SortableSidebarNode({
     isDragging
   } = useSortable({ id: node.id });
 
+  const isActive = node.slug === currentSlug;
+  const isEditing = editingId === node.id;
+  const activeRef = useRef<HTMLDivElement>(null);
+
+  // Scroll active item into view on mount or slug change
+  useEffect(() => {
+    if (isActive && activeRef.current) {
+      activeRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }, [isActive]);
+
   const style = {
     transform: CSS.Translate.toString(transform),
     transition,
     opacity: isDragging ? 0.3 : 1,
-    paddingLeft: '4px' // Minimal base padding, hierarchy handled by container margins
+    paddingLeft: '4px' 
   };
-
-  const isActive = node.slug === currentSlug;
-  const isEditing = editingId === node.id;
 
   return (
     <div ref={setNodeRef} style={style} className="select-none animate-node-enter">
       <div 
+        ref={isActive ? activeRef : null}
         className={`
           group/item flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg cursor-pointer transition-all duration-200 relative
-          ${isActive ? 'bg-[var(--accent-light)] text-[var(--accent-primary)]' : 'hover:bg-slate-50 text-slate-500 hover:text-slate-900'}
+          ${isActive ? 'bg-[var(--accent-primary)]/10 text-[var(--accent-primary)] shadow-sm ring-1 ring-[var(--accent-primary)]/20' : 'hover:bg-slate-50 text-slate-500 hover:text-slate-900'}
         `}
         onClick={() => node.type === 'page' ? onNavigate(node.slug!) : onToggleNode(node.id)}
       >
-        {/* Active Indicator - subtle dot or just background */}
-        {isActive && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-4 bg-[var(--accent-primary)] rounded-full" />}
+        {/* Active Indicator - prominent bar */}
+        {isActive && <div className="absolute left-[-2px] top-1/2 -translate-y-1/2 w-1 h-5 bg-[var(--accent-primary)] rounded-r-full shadow-[0_0_8px_var(--accent-primary)]" />}
 
         <div {...listeners} {...attributes} className="opacity-0 group-hover/item:opacity-20 cursor-grab active:cursor-grabbing p-1 -ml-1 hover:opacity-100 transition-opacity shrink-0">
           <GripVertical size={12} />

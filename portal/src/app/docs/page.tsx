@@ -11,17 +11,25 @@ export default function DocsHome() {
       router.push('/login');
       return;
     }
-    // Fetch the sidebar for the "docs" workspace to find the real first page in the tree
     api.get('/sidebar?workspace=docs').then((res: any) => {
       const tree = res.tree || [];
-      const JUNK_SLUG_RE = /^(new-?page-?\d*|untitled-?\d*|page-?\d*|new-?\d*|tmp-?\d*|[a-z0-9])$/i;
       
+      // Strictly find the first valid page in depth-first order
       const findFirstPage = (nodes: any[]): string | null => {
+        if (!nodes || nodes.length === 0) return null;
+        
         for (const n of nodes) {
-          if (n.type === 'page' && n.slug && !JUNK_SLUG_RE.test(n.slug.split('/').pop() || '')) return n.slug;
-          if (n.children) {
-            const r = findFirstPage(n.children);
-            if (r) return r;
+          // If it's a page and not a junk/draft slug, this is our winner
+          if (n.type === 'page' && n.slug && n.slug.length > 1) {
+            const lastPart = n.slug.split('/').pop() || '';
+            const isJunk = /^(new-?page|untitled|page|tmp|draft)/i.test(lastPart);
+            if (!isJunk) return n.slug;
+          }
+          
+          // If it's a category, look inside its children first (depth-first)
+          if (n.type === 'category' && n.children && n.children.length > 0) {
+            const firstChild = findFirstPage(n.children);
+            if (firstChild) return firstChild;
           }
         }
         return null;
@@ -29,6 +37,7 @@ export default function DocsHome() {
 
       const firstPage = findFirstPage(tree);
       if (firstPage) {
+        console.log('Redirecting to first page:', firstPage);
         router.replace(`/docs/${firstPage}`);
       }
     }).catch(() => router.push('/login'));
