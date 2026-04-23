@@ -39,17 +39,18 @@ export default function WorkspacePage() {
           api.get(`/sidebar?workspace=${slug}`).then((res: any) => {
              const tree = res.tree || [];
              if (tree.length > 0) {
-               // Find first page
-               const findFirstPage = (nodes: any[]): string | null => {
-                 for (const n of nodes) {
-                   if (n.type === 'page' && n.slug) return n.slug;
-                   if (n.children) {
-                     const r = findFirstPage(n.children);
-                     if (r) return r;
-                   }
-                 }
-                 return null;
-               };
+               // Find first page with a valid (non-junk) slug
+              const JUNK_SLUG_RE = /^(new-?page-?\d*|untitled-?\d*|page-?\d*|new-?\d*|tmp-?\d*|[a-z0-9])$/i;
+              const findFirstPage = (nodes: any[]): string | null => {
+                for (const n of nodes) {
+                  if (n.type === 'page' && n.slug && !JUNK_SLUG_RE.test(n.slug.split('/').pop() || '')) return n.slug;
+                  if (n.children) {
+                    const r = findFirstPage(n.children);
+                    if (r) return r;
+                  }
+                }
+                return null;
+              };
                const firstPage = findFirstPage(tree);
                if (firstPage) {
                  router.replace(`/workspace/${slug}/${firstPage}`);

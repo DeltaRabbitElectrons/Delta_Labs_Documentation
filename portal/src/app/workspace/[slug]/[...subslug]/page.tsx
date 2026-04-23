@@ -34,6 +34,7 @@ export default function WorkspacePageContent() {
   const [page, setPage] = useState<PageData | null>(null);
   const [showHistory, setShowHistory] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [notFound, setNotFound] = useState(false);
   const [changeMap, setChangeMap] = useState<Record<string, ChangeLogEntry>>({});
   const loadingSlugRef = useRef<string>('');
 
@@ -73,12 +74,13 @@ export default function WorkspacePageContent() {
       }
     } catch {
       if (!cached) {
-        router.push(`/workspace/${workspaceSlug}`);
+        setNotFound(true);
       }
     }
   }, [workspaceSlug, router]);
 
   useEffect(() => {
+    setNotFound(false);
     if (rawSlug) loadPage(rawSlug);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rawSlug, workspaceSlug]);
@@ -105,7 +107,25 @@ export default function WorkspacePageContent() {
           </div>
         )}
 
-        {page ? (
+        {notFound ? (
+          <div className="w-full max-w-[800px] px-12 py-20">
+            <div className="flex flex-col items-center justify-center py-24">
+              <div className="w-20 h-20 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center mb-6 shadow-sm">
+                <ChevronRight size={32} className="text-slate-300" />
+              </div>
+              <h1 className="text-[22px] font-bold text-slate-800 mb-2">Page Not Found</h1>
+              <p className="text-[14px] text-slate-500 mb-6 text-center leading-relaxed max-w-[320px]">
+                The page <span className="font-semibold text-slate-700">&ldquo;{rawSlug}&rdquo;</span> doesn&apos;t exist in this workspace. Select a page from the sidebar.
+              </p>
+              <button
+                onClick={() => router.push(`/workspace/${workspaceSlug}`)}
+                className="px-5 py-2.5 rounded-xl bg-[var(--accent-primary)] text-white text-[13px] font-bold hover:bg-[var(--accent-hover)] transition-all shadow-md"
+              >
+                Go to Workspace
+              </button>
+            </div>
+          </div>
+        ) : page ? (
           <div className="w-full max-w-[800px] px-12 py-20">
             {/* Breadcrumb Context */}
             <div className="flex items-center gap-2 mb-10 text-[var(--text-muted)] text-[12px] font-medium uppercase tracking-[0.05em]">
