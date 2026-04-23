@@ -46,7 +46,7 @@ export default function WorkspacePage() {
                 for (const n of nodes) {
                   if (n.type === 'page' && n.slug && n.slug.length > 1) {
                     const lastPart = n.slug.split('/').pop() || '';
-                    const isJunk = /^(new-?page|untitled|page|tmp|draft|readme|index|todo|introduction-?placeholder)/i.test(lastPart);
+                    const isJunk = /^(new-?page|untitled|page|tmp|draft|readme|index|todo|intro-?placeholder|null|undefined)$/i.test(lastPart);
                     if (!isJunk) return n.slug;
                   }
                   if (n.type === 'category' && n.children && n.children.length > 0) {
