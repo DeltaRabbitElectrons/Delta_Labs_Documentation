@@ -64,6 +64,45 @@ export default function DocsSidebar({
 }: SidebarProps) {
   const [tree, setTree] = useState<SidebarNode[]>([]);
   const [loading, setLoading] = useState(true);
+  const normalize = (s: string | undefined | null) => 
+    (s || '').toLowerCase().trim()
+      .replace(/^ws:[^:]+:/, '') // Strip workspace prefix
+      .split('/')
+      .map(p => p.replace(/^\d+-/, '')) // Strip numbered prefixes
+      .join('/')
+      .replace(/^\/+|\/+$/g, '');
+
+  // Derived tree that is always expanded to show the currentSlug
+  const processedTree = React.useMemo(() => {
+    const normalizedCurrent = normalize(currentSlug);
+    if (!normalizedCurrent) return tree;
+
+    const expandActiveParents = (nodes: SidebarNode[]): { nodes: SidebarNode[], found: boolean } => {
+      let treeFound = false;
+      const newNodes = nodes.map(n => {
+        const nodeNormalized = normalize(n.slug);
+        let nodeFound = nodeNormalized === normalizedCurrent && n.type === 'page';
+        let childrenResult = { nodes: [] as SidebarNode[], found: false };
+        
+        if (n.children && n.children.length > 0) {
+          childrenResult = expandActiveParents(n.children);
+          if (childrenResult.found) nodeFound = true;
+        }
+        
+        if (nodeFound) treeFound = true;
+        
+        return {
+          ...n,
+          isOpen: nodeFound ? true : n.isOpen,
+          children: n.children ? childrenResult.nodes : []
+        };
+      });
+      return { nodes: newNodes, found: treeFound };
+    };
+
+    return expandActiveParents(tree).nodes;
+  }, [tree, currentSlug]);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState('');
@@ -149,44 +188,8 @@ export default function DocsSidebar({
         }));
 
       const healedTree = healTree(sourceTree);
-
-      // 4. AUTO-EXPAND: Find and open all parent folders of the currentSlug
-      const expandActiveParents = (nodes: SidebarNode[]): { tree: SidebarNode[], found: boolean } => {
-        let treeFound = false;
-        const newNodes = nodes.map(n => {
-          const nodeNormalized = normalize(n.slug);
-          let nodeFound = nodeNormalized === normalizedCurrent && n.type === 'page';
-          let childrenResult = { tree: [] as SidebarNode[], found: false };
-          
-          if (n.children && n.children.length > 0) {
-            childrenResult = expandActiveParents(n.children);
-            if (childrenResult.found) nodeFound = true;
-          }
-          
-          if (nodeFound) treeFound = true;
-          
-          if (nodeFound && n.type === 'category') {
-            console.log('📂 Expanding Folder:', { label: n.label, slug: n.slug });
-          }
-          
-          return {
-            ...n,
-            isOpen: nodeFound ? true : (n.isOpen ?? false),
-            children: n.children ? childrenResult.tree : []
-          };
-        });
-        return { tree: newNodes, found: treeFound };
-      };
-
-      const finalTree = expandActiveParents(healedTree).tree;
-      console.log('Sidebar Load:', { 
-        workspace: workspaceSlug, 
-        current: normalizedCurrent, 
-        treeSize: finalTree.length 
-      });
-      setTree(finalTree);
+      setTree(healedTree);
       
-      // If we healed it, save it back to clear the draft pollution
       if (draft) {
          draftStore.saveSidebar(healedTree, workspaceSlug);
       }
@@ -231,8 +234,7 @@ export default function DocsSidebar({
 
     const updatedTree = addToTree(tree);
     setTree(updatedTree);
-    saveSidebar(updatedTree); // Persist immediately
-    // Mark as pending — backend creation deferred until name is confirmed
+    saveSidebar(updatedTree); 
     pendingNodeIds.current.add(newNode.id);
     setEditingId(newNode.id);
     setEditValue('');
@@ -272,7 +274,6 @@ export default function DocsSidebar({
     const trimmedValue = editValue.trim();
     const isPending = pendingNodeIds.current.has(id);
 
-    // If new node with no name entered — remove it
     if (isPending && !trimmedValue) {
       const removeFromTree = (nodes: SidebarNode[]): SidebarNode[] =>
         nodes.filter(n => n.id !== id).map(n => ({
@@ -287,8 +288,6 @@ export default function DocsSidebar({
 
     const label = trimmedValue || editValue;
 
-    // Only derive slug from label if it's a completely NEW page (pending).
-    // If it's an existing page, we only change the label, not the underlying file slug.
     const findNode = (nodes: SidebarNode[]): SidebarNode | null => {
       for (const n of nodes) {
         if (n.id === id) return n;
@@ -297,7 +296,6 @@ export default function DocsSidebar({
       return null;
     };
 
-    // Walk up the tree to build the full parent path for unique slugs
     const findParentPath = (nodes: SidebarNode[], targetId: string, path: string[] = []): string[] | null => {
       for (const n of nodes) {
         if (n.id === targetId) return path;
@@ -333,7 +331,6 @@ export default function DocsSidebar({
 
     if (isPending) {
       pendingNodeIds.current.delete(id);
-      // Now create page file in backend with confirmed name/slug
       if (node?.type === 'page' && derivedSlug) {
         try {
           await api.post(`/sidebar/page?workspace=${workspaceSlug}`, { slug: derivedSlug, label });
@@ -345,7 +342,6 @@ export default function DocsSidebar({
           } else {
             addToast('error', 'Failed to create page. Please try again.');
           }
-          // Remove the failed node from the tree
           const removeFromTree = (nodes: SidebarNode[]): SidebarNode[] =>
             nodes.filter(n => n.id !== id).map(n => ({
               ...n, children: n.children ? removeFromTree(n.children) : []
@@ -385,7 +381,6 @@ export default function DocsSidebar({
     saveSidebar(updatedTree);
   };
 
-  // Advanced recursive search logic
   const getFilteredTree = (nodes: SidebarNode[], query: string): SidebarNode[] => {
     if (!query) return nodes;
     
@@ -398,20 +393,15 @@ export default function DocsSidebar({
         return {
           ...node,
           children: filteredChildren,
-          isOpen: query ? true : node.isOpen // Force open if searching
+          isOpen: query ? true : node.isOpen 
         };
       }
       return null;
     }).filter(Boolean) as SidebarNode[];
   };
 
-  const filteredTree = getFilteredTree(tree, searchQuery);
+  const filteredTree = getFilteredTree(processedTree, searchQuery);
 
-  /**
-   * Recursively toggles the `isOpen` flag of any node in the tree by its ID.
-   * This single handler is passed to all SortableSidebarNode instances so that
-   * folders at ANY nesting depth can be collapsed/expanded.
-   */
   const handleToggleNode = (toggleId: string) => {
     const updateToggle = (nodes: SidebarNode[]): SidebarNode[] => {
       return nodes.map(n => {
@@ -443,7 +433,6 @@ export default function DocsSidebar({
 
   return (
     <>
-    {/* Delete Confirmation Modal */}
     {deleteTarget && (
       <div className="fixed inset-0 z-[500] flex items-center justify-center p-6">
         <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setDeleteTarget(null)} />
@@ -498,7 +487,6 @@ export default function DocsSidebar({
       style={{ width: isCollapsed ? '0px' : `${sidebarWidth}px` }}
     >
       
-      {/* Brand & Global Controls */}
       <div className="px-4 pt-6 pb-4">
          <div className="flex items-center justify-between mb-5">
             <div className="flex flex-col">
@@ -533,7 +521,6 @@ export default function DocsSidebar({
             </div>
          </div>
 
-         {/* Premium Search Bar */}
          <div className="relative group">
             <div className={`
               absolute inset-0 bg-slate-50 rounded-lg transition-all duration-300
