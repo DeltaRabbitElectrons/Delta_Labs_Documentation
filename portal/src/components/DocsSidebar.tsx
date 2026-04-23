@@ -131,7 +131,7 @@ export default function DocsSidebar({
 
       // 2. NORMALIZE: Helper to strip prefixes and slashes for stable matching
       const normalize = (s: string | undefined | null) => 
-        (s || '').split('/').map(p => p.replace(/^\d+-/, '')).join('/').replace(/^\/+|\/+$/g, '');
+        (s || '').toLowerCase().trim().split('/').map(p => p.replace(/^\d+-/, '')).join('/').replace(/^\/+|\/+$/g, '');
 
       const normalizedCurrent = normalize(currentSlug);
 
@@ -668,7 +668,7 @@ function SortableSidebarNode({
   } = useSortable({ id: node.id });
 
   const normalize = (s: string | undefined | null) => 
-    (s || '').split('/').map(p => p.replace(/^\d+-/, '')).join('/').replace(/^\/+|\/+$/g, '');
+    (s || '').toLowerCase().trim().split('/').map(p => p.replace(/^\d+-/, '')).join('/').replace(/^\/+|\/+$/g, '');
 
   const isActive = node.type === 'page' && normalize(node.slug) === normalize(currentSlug);
   const isEditing = editingId === node.id;
