@@ -129,9 +129,14 @@ export default function DocsSidebar({
       // 1. Initial tree from source (draft or DB)
       let sourceTree = draft ? draft.tree : dbTree;
 
-      // 2. NORMALIZE: Helper to strip prefixes and slashes for stable matching
+      // 2. NORMALIZE: Helper to strip ALL prefixes (ws:workspace: and 01-) for stable matching
       const normalize = (s: string | undefined | null) => 
-        (s || '').toLowerCase().trim().split('/').map(p => p.replace(/^\d+-/, '')).join('/').replace(/^\/+|\/+$/g, '');
+        (s || '').toLowerCase().trim()
+          .replace(/^ws:[^:]+:/, '') // Strip workspace prefix
+          .split('/')
+          .map(p => p.replace(/^\d+-/, '')) // Strip numbered prefixes
+          .join('/')
+          .replace(/^\/+|\/+$/g, '');
 
       const normalizedCurrent = normalize(currentSlug);
 
@@ -673,7 +678,12 @@ function SortableSidebarNode({
   } = useSortable({ id: node.id });
 
   const normalize = (s: string | undefined | null) => 
-    (s || '').toLowerCase().trim().split('/').map(p => p.replace(/^\d+-/, '')).join('/').replace(/^\/+|\/+$/g, '');
+    (s || '').toLowerCase().trim()
+      .replace(/^ws:[^:]+:/, '') // Strip workspace prefix
+      .split('/')
+      .map(p => p.replace(/^\d+-/, '')) // Strip numbered prefixes
+      .join('/')
+      .replace(/^\/+|\/+$/g, '');
 
   const normalizedNodeSlug = normalize(node.slug);
   const normalizedCurrent = normalize(currentSlug);
