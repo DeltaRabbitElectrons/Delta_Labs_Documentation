@@ -690,7 +690,24 @@ function SortableSidebarNode({
   const isActive = node.type === 'page' && normalizedNodeSlug === normalizedCurrent;
 
   if (isActive) {
-    console.log('Active Node Found:', { label: node.label, slug: node.slug });
+    console.log('✅ ACTIVE MATCH:', { 
+      label: node.label, 
+      nodeSlug: node.slug, 
+      normNode: normalizedNodeSlug,
+      current: currentSlug,
+      normCurrent: normalizedCurrent
+    });
+  } else if (node.type === 'page' && currentSlug) {
+    // Only log mismatches for pages to avoid noise
+    if (normalizedNodeSlug.includes(normalizedCurrent.split('/')[0]) || normalizedCurrent.includes(normalizedNodeSlug.split('/')[0])) {
+       console.log('❌ MISMATCH:', { 
+         label: node.label, 
+         nodeSlug: node.slug, 
+         normNode: normalizedNodeSlug,
+         current: currentSlug,
+         normCurrent: normalizedCurrent
+       });
+    }
   }
 
   const isEditing = editingId === node.id;
