@@ -129,23 +129,28 @@ export default function DocsSidebar({
       // 1. Initial tree from source (draft or DB)
       let sourceTree = draft ? draft.tree : dbTree;
 
-      // 2. SELF-HEALING: Strip any legacy stacked prefixes (ws:workspace:) 
-      // from the slugs to ensure we don't request double-prefixed APIs.
-      const prefix = `ws:${workspaceSlug}:`;
+      // 2. NORMALIZE: Helper to strip prefixes and slashes for stable matching
+      const normalize = (s: string | undefined | null) => 
+        (s || '').split('/').map(p => p.replace(/^\d+-/, '')).join('/').replace(/^\/+|\/+$/g, '');
+
+      const normalizedCurrent = normalize(currentSlug);
+
+      // 3. SELF-HEALING: Strip legacy prefixes and normalize tree slugs
       const healTree = (nodes: SidebarNode[]): SidebarNode[] => 
         nodes.map(n => ({
           ...n,
-          slug: (n.slug?.startsWith(prefix) ? n.slug.slice(prefix.length) : n.slug),
+          slug: n.slug ? normalize(n.slug) : n.slug,
           children: n.children ? healTree(n.children) : undefined
         }));
 
       const healedTree = healTree(sourceTree);
 
-      // 3. AUTO-EXPAND: Find and open all parent folders of the currentSlug
+      // 4. AUTO-EXPAND: Find and open all parent folders of the currentSlug
       const expandActiveParents = (nodes: SidebarNode[]): { tree: SidebarNode[], found: boolean } => {
         let treeFound = false;
         const newNodes = nodes.map(n => {
-          let nodeFound = n.slug === currentSlug;
+          const nodeNormalized = normalize(n.slug);
+          let nodeFound = nodeNormalized === normalizedCurrent && n.type === 'page';
           let childrenResult = { tree: [] as SidebarNode[], found: false };
           
           if (n.children && n.children.length > 0) {
@@ -662,7 +667,10 @@ function SortableSidebarNode({
     isDragging
   } = useSortable({ id: node.id });
 
-  const isActive = node.slug === currentSlug;
+  const normalize = (s: string | undefined | null) => 
+    (s || '').split('/').map(p => p.replace(/^\d+-/, '')).join('/').replace(/^\/+|\/+$/g, '');
+
+  const isActive = node.type === 'page' && normalize(node.slug) === normalize(currentSlug);
   const isEditing = editingId === node.id;
   const activeRef = useRef<HTMLDivElement>(null);
 
