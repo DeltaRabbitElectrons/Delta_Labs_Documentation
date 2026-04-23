@@ -11,10 +11,26 @@ export default function DocsHome() {
       router.push('/login');
       return;
     }
-    api.get<any[]>('/pages').then(pages => {
-      if (pages.length === 0) return;
-      const first = pages.sort((a, b) => a.sidebar_position - b.sidebar_position)[0];
-      router.replace(`/docs/${first.slug}`);
+    // Fetch the sidebar for the "docs" workspace to find the real first page in the tree
+    api.get('/sidebar?workspace=docs').then((res: any) => {
+      const tree = res.tree || [];
+      const JUNK_SLUG_RE = /^(new-?page-?\d*|untitled-?\d*|page-?\d*|new-?\d*|tmp-?\d*|[a-z0-9])$/i;
+      
+      const findFirstPage = (nodes: any[]): string | null => {
+        for (const n of nodes) {
+          if (n.type === 'page' && n.slug && !JUNK_SLUG_RE.test(n.slug.split('/').pop() || '')) return n.slug;
+          if (n.children) {
+            const r = findFirstPage(n.children);
+            if (r) return r;
+          }
+        }
+        return null;
+      };
+
+      const firstPage = findFirstPage(tree);
+      if (firstPage) {
+        router.replace(`/docs/${firstPage}`);
+      }
     }).catch(() => router.push('/login'));
   }, [router]);
 
